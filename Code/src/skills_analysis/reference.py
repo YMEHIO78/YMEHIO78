@@ -14,7 +14,8 @@ from pathlib import Path
 
 from .normalize import norm_key, normalize_person_name
 
-REFERENCE_DIR = Path(__file__).resolve().parents[2] / "data" / "reference"
+# Code/src/skills_analysis/reference.py -> repo root is four levels up.
+REFERENCE_DIR = Path(__file__).resolve().parents[3] / "Data" / "reference"
 
 
 def _read(path: Path) -> list[dict[str, str]]:

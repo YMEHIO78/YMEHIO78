@@ -11,17 +11,49 @@ the reconciliation, and every judgement it makes is recorded rather than assumed
 
 ## What is in here
 
+```
+Data/          the inputs
+Deliverables/  the outputs
+Code/          what turns one into the other
+```
+
+### `Data/`
+
 | Path | What it is |
 |---|---|
-| `notebooks/` | The Databricks pipeline: setup → bronze → silver → gold → report |
-| `dashboards/skills_intelligence.lvdash.json` | AI/BI dashboard, four KPI tiles plus filters |
-| `src/skills_analysis/` | Extraction, normalisation and transform logic shared by the notebooks, the local runner and the tests |
-| `data/raw/` | The four source exports, unmodified |
-| `data/reference/` | The maintained mapping tables — skill aliases, identity crosswalk, rating scales, criticality |
-| `local/run_analysis.py` | Runs the whole pipeline on a laptop and writes CSVs plus the HTML report |
-| `local/build_dashboard.py` | Generates the dashboard definition |
-| `tests/` | 103 tests over the cleaning rules and the pipeline's decisions |
-| `docs/` | [Findings](docs/FINDINGS.md) · [Data model](docs/DATA_MODEL.md) · [Deploying](docs/DEPLOY.md) |
+| `Data/raw/` | The four source exports, byte for byte as they arrived |
+| `Data/reference/` | The maintained mapping tables — skill aliases, identity crosswalk, rating scales, criticality |
+
+`Data/reference/` is where every human judgement lives: which spellings are the
+same skill, which identifiers are the same person, what an "H" rating means.
+It is CSV on purpose, so the people who own those answers can review and change
+them without touching pipeline code.
+
+### `Deliverables/`
+
+| Path | What it is |
+|---|---|
+| [`Deliverables/skills_report.html`](Deliverables/skills_report.html) | The findings report — open it in a browser |
+| [`Deliverables/FINDINGS.md`](Deliverables/FINDINGS.md) | The same findings, readable on GitHub |
+| `Deliverables/skills_intelligence.lvdash.json` | The AI/BI dashboard — four KPI tiles plus filters |
+
+Both the report and the dashboard are **generated**, not hand-written. Re-running
+the pipeline overwrites them, so they cannot drift from the tables behind them.
+
+### `Code/`
+
+| Path | What it is |
+|---|---|
+| `Code/notebooks/` | The Databricks pipeline: setup → bronze → silver → gold → report |
+| `Code/src/skills_analysis/` | Extraction, normalisation and transform logic shared by the notebooks, the local runner and the tests |
+| `Code/local/` | `run_analysis.py` runs the whole pipeline without a cluster; `build_dashboard.py` generates the dashboard |
+| `Code/tests/` | 103 tests over the cleaning rules and the pipeline's decisions |
+| `Code/resources/` | The job definition for the Asset Bundle |
+| `Code/docs/` | [Data model](Code/docs/DATA_MODEL.md) · [Deploying](Code/docs/DEPLOY.md) |
+
+`databricks.yml` sits at the repository root because that is the Asset Bundle
+root — it has to sit above both `Code/` and `Deliverables/` to deploy the
+notebooks from one and the dashboard from the other.
 
 ## The four metrics on the dashboard
 
@@ -40,7 +72,7 @@ people are learning, and the system of record does not know about it.
 
 ## What the reconciliation found
 
-Full write-up in [`docs/FINDINGS.md`](docs/FINDINGS.md). The short version:
+Full write-up in [`Deliverables/FINDINGS.md`](Deliverables/FINDINGS.md). The short version:
 
 - **25 people arrive as 28 identifiers.** Three are split identities — a truncated
   employee ID and two legacy Splunk worker IDs — each holding half of someone's
@@ -61,9 +93,9 @@ Full write-up in [`docs/FINDINGS.md`](docs/FINDINGS.md). The short version:
 Locally, no Databricks needed — this produces every table as CSV plus the report:
 
 ```bash
-pip install -r requirements.txt
-python local/run_analysis.py          # -> build/*.csv and build/skills_report.html
-python -m pytest tests/ -q            # 103 tests
+pip install -r Code/requirements.txt
+python Code/local/run_analysis.py     # -> Deliverables/skills_report.html
+python -m pytest Code/tests/ -q       # 103 tests
 ```
 
 On Databricks:
@@ -74,8 +106,8 @@ databricks bundle deploy   -t dev --var="warehouse_id=<your-sql-warehouse-id>"
 databricks bundle run skills_analysis_pipeline -t dev
 ```
 
-See [`docs/DEPLOY.md`](docs/DEPLOY.md) for prerequisites and for importing the
-dashboard without the bundle.
+See [`Code/docs/DEPLOY.md`](Code/docs/DEPLOY.md) for prerequisites and for
+importing the dashboard without the bundle.
 
 ## Design decisions worth knowing
 
@@ -84,7 +116,7 @@ dashboard without the bundle.
   to what actually arrived and re-run differently without re-ingesting.
 - **Human judgement lives in CSV, not code.** Which spellings are one skill, which
   identifiers are one person, what an "H" rating means, which skills are critical
-  — all in `data/reference/`, reviewable by the people who own the answer.
+  — all in `Data/reference/`, reviewable by the people who own the answer.
 - **Depth requires a comparable scale.** The matrix's legacy H/M/L ratings are
   translated onto 1–5 as an approximation, and approximations never establish that
   someone is deep in a skill. Letting them would have manufactured four false
@@ -101,7 +133,7 @@ dashboard without the bundle.
 
 - 21 people in headcount. Percentages move about five points per person — read the
   counts, not the decimals.
-- Skill criticality is a judgement in `data/reference/critical_skills.csv`, not
+- Skill criticality is a judgement in `Data/reference/critical_skills.csv`, not
   something derived from the data. It is the input a reader should challenge first.
 - Expiry dates recorded as fiscal shorthand ("Q1 FY28", "end of FY") are left null
   rather than guessed, so they cannot be alerted on until someone enters a real date.

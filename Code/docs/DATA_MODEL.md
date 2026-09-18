@@ -4,7 +4,7 @@ Three layers, each with one job. The layer boundary is the point at which you ca
 stop and ask "is this still what arrived?" and get a yes.
 
 ```
-data/raw/  ──▶  bronze  ──▶  silver  ──▶  gold  ──▶  report + dashboard
+Data/raw/  ──▶  bronze  ──▶  silver  ──▶  gold  ──▶  report + dashboard
  4 exports      verbatim     conformed    analytics
 ```
 
@@ -42,7 +42,7 @@ be traced to what actually arrived, and re-run differently without re-ingesting.
 ### The rules silver applies
 
 **Identity.** Each source's identifier resolves to a Workday employee ID through
-`data/reference/identity_overrides.csv`. Resolution is tried in order: the
+`Data/reference/identity_overrides.csv`. Resolution is tried in order: the
 override table, a well-formed Workday ID, then the name with its order normalised
 (so `Chen, Wei-Lin` and `Wei-Lin Chen` are one key). An override with an empty
 employee ID means *reviewed and deliberately out of scope* — distinct from
@@ -105,7 +105,7 @@ decide.
 
 ## Tuning knobs
 
-All in `src/skills_analysis/config.py`, overridable by environment variable.
+All in `Code/src/skills_analysis/config.py`, overridable by environment variable.
 
 | Setting | Default | Meaning |
 |---|---|---|

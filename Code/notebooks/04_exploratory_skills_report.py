@@ -24,13 +24,21 @@ import sys
 from pathlib import Path
 
 
-def repo_root() -> Path:
+def roots() -> tuple[Path, Path]:
+    """(Code/, repository root), whether this runs from a Git folder or a bundle.
+
+    This notebook lives at ``Code/notebooks/``, so the code root is two levels
+    up and the repository root - which holds ``Data/`` and ``Deliverables/`` -
+    is one above that.
+    """
     ctx = dbutils.notebook.entry_point.getDbutils().notebook().getContext()
-    return Path("/Workspace" + ctx.notebookPath().get()).resolve().parent.parent
+    here = Path("/Workspace" + ctx.notebookPath().get()).resolve()
+    code_root = here.parent.parent
+    return code_root, code_root.parent
 
 
-ROOT = repo_root()
-sys.path.insert(0, str(ROOT / "src"))
+CODE_ROOT, REPO_ROOT = roots()
+sys.path.insert(0, str(CODE_ROOT / "src"))
 
 from skills_analysis import config as cfg, report  # noqa: E402
 

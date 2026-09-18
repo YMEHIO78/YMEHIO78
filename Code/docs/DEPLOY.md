@@ -36,7 +36,7 @@ The run takes a few minutes and produces:
 
 Tasks run on **serverless** compute, which needs no configuration. To use classic
 compute instead, add a `job_clusters` block to
-`resources/skills_analysis_job.yml` and give each task a `job_cluster_key`:
+`Code/resources/skills_analysis_job.yml` and give each task a `job_cluster_key`:
 
 ```yaml
       job_clusters:
@@ -55,12 +55,12 @@ A single node is ample — the whole dataset is a few hundred rows.
 Two manual paths, if you would rather not use the CLI.
 
 **Notebooks.** Clone this repository as a Git folder
-(*Workspace → Create → Git folder*), then run `notebooks/00` through `04` in
+(*Workspace → Create → Git folder*), then run `Code/notebooks/00` through `04` in
 order. They locate the repository root from their own path, so no configuration
 is needed.
 
 **Dashboard.** *Dashboards → Create dashboard → ⋮ → Import dashboard from file*,
-and choose `dashboards/skills_intelligence.lvdash.json`. Then set its warehouse
+and choose `Deliverables/skills_intelligence.lvdash.json`. Then set its warehouse
 and, if you changed the catalog name, update the five dataset queries.
 
 ## Using an existing catalog
@@ -77,23 +77,23 @@ databricks bundle deploy -t dev \
 exists, but you still need `CREATE SCHEMA` and `CREATE VOLUME` on it.
 
 You can also override the catalog outside the bundle with the `SKILLS_CATALOG`
-environment variable; see `src/skills_analysis/config.py` for the full list.
+environment variable; see `Code/src/skills_analysis/config.py` for the full list.
 
 ## Refreshing the data
 
-The source exports are one-off files in `data/raw/`, so the job's schedule ships
+The source exports are one-off files in `Data/raw/`, so the job's schedule ships
 **paused**. To refresh:
 
-1. Drop new exports into `data/raw/` with the same filenames, or change the
-   filenames in `SOURCE_FILES` in `src/skills_analysis/config.py`.
+1. Drop new exports into `Data/raw/` with the same filenames, or change the
+   filenames in `SOURCE_FILES` in `Code/src/skills_analysis/config.py`.
 2. Update `as_of_date` in `databricks.yml` to the new extract date.
 3. Re-run the job.
 
 To point at real feeds instead, replace the readers in
-`src/skills_analysis/extract.py`. Everything downstream is unchanged as long as
+`Code/src/skills_analysis/extract.py`. Everything downstream is unchanged as long as
 they return the same columns.
 
-Before promoting a refresh, run `python -m pytest tests/ -q` locally. The
+Before promoting a refresh, run `python -m pytest Code/tests/ -q` locally. The
 pipeline tests assert the decisions made about this population, so a new extract
 that changes a headline number fails there first — which is the point.
 

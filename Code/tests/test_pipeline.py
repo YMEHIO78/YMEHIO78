@@ -11,9 +11,9 @@ from pathlib import Path
 
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "src"))
-sys.path.insert(0, str(REPO_ROOT / "local"))
+CODE_ROOT = Path(__file__).resolve().parents[1]      # Code/
+sys.path.insert(0, str(CODE_ROOT / "src"))
+sys.path.insert(0, str(CODE_ROOT / "local"))
 
 from run_analysis import run  # noqa: E402
 

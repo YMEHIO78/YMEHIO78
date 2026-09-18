@@ -6,7 +6,7 @@ Absence. Contingent workers, interns and leavers are reported but never counted
 in coverage, so a departure cannot look like an improvement.
 
 The rendered version with charts is `build/skills_report.html`, produced by
-`local/run_analysis.py` and by notebook `04`.
+`Code/local/run_analysis.py` and by notebook `04`.
 
 ---
 
@@ -178,7 +178,7 @@ Notable individual repairs:
 
 - 21 people in headcount. Percentages move roughly five points per person.
 - Skill criticality is a maintained judgement in
-  `data/reference/critical_skills.csv`, not derived from the data.
+  `Data/reference/critical_skills.csv`, not derived from the data.
 - Evidence precedence is a rule, not a fact: manager assessment > self assessment
   > skills matrix. Where sources disagree the stronger evidence wins and the
   disagreement is logged, never averaged.

@@ -26,8 +26,10 @@ variables:
     description: Address to notify when the scheduled run fails.
     default: ""
 
+# The bundle root is the repository root, so both Code/ and Deliverables/ are
+# inside it - the job deploys notebooks from one and the dashboard from the other.
 include:
-  - resources/*.yml
+  - Code/resources/*.yml
 
 targets:
   dev:

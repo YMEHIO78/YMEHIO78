@@ -14,14 +14,15 @@ import argparse
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "src"))
+CODE_ROOT = Path(__file__).resolve().parents[1]      # Code/
+REPO_ROOT = CODE_ROOT.parent                          # repository root
+sys.path.insert(0, str(CODE_ROOT / "src"))
 
 import pandas as pd  # noqa: E402
 
 from skills_analysis import config as cfg, extract, gold, report, transform  # noqa: E402
 
-RAW = REPO_ROOT / "data" / "raw"
+RAW = REPO_ROOT / "Data" / "raw"
 
 
 def run(out_dir: Path) -> dict[str, pd.DataFrame]:
@@ -70,22 +71,26 @@ def run(out_dir: Path) -> dict[str, pd.DataFrame]:
     out_dir.mkdir(parents=True, exist_ok=True)
     for name, frame in tables.items():
         frame.to_csv(out_dir / f"{name}.csv", index=False)
-    (out_dir / "skills_report.html").write_text(
-        report.build_report(tables), encoding="utf-8"
-    )
+    # The report is a deliverable, not a build artefact: it is written to
+    # Deliverables/ and committed, while the intermediate tables stay in build/.
+    deliverable = REPO_ROOT / "Deliverables" / "skills_report.html"
+    deliverable.parent.mkdir(parents=True, exist_ok=True)
+    deliverable.write_text(report.build_report(tables), encoding="utf-8")
     return tables
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out", default=str(REPO_ROOT / "build"), help="output directory")
+    parser.add_argument("--out", default=str(CODE_ROOT / "build"),
+                        help="directory for the intermediate CSV tables")
     args = parser.parse_args()
 
     tables = run(Path(args.out))
     print(f"As-of date: {cfg.AS_OF_DATE}\n")
     for name, frame in tables.items():
         print(f"  {name:36s} {len(frame):5d} rows")
-    print(f"\nWrote {len(tables)} tables and skills_report.html to {args.out}")
+    print(f"\nWrote {len(tables)} tables to {args.out}")
+    print(f"Wrote Deliverables/skills_report.html")
     return 0
 
 

@@ -16,8 +16,9 @@ import json
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "src"))
+CODE_ROOT = Path(__file__).resolve().parents[1]      # Code/
+REPO_ROOT = CODE_ROOT.parent                          # repository root
+sys.path.insert(0, str(CODE_ROOT / "src"))
 
 from skills_analysis import config as cfg  # noqa: E402
 
@@ -366,7 +367,7 @@ def build() -> dict:
 
 
 def main() -> int:
-    out = REPO_ROOT / "dashboards" / "skills_intelligence.lvdash.json"
+    out = REPO_ROOT / "Deliverables" / "skills_intelligence.lvdash.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     dashboard = build()
     out.write_text(json.dumps(dashboard, indent=2) + "\n", encoding="utf-8")

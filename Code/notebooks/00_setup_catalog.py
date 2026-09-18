@@ -25,19 +25,26 @@ import sys
 from pathlib import Path
 
 
-def repo_root() -> Path:
-    """Repo root whether this runs from a Git folder or a deployed bundle."""
+def roots() -> tuple[Path, Path]:
+    """(Code/, repository root), whether this runs from a Git folder or a bundle.
+
+    This notebook lives at ``Code/notebooks/``, so the code root is two levels
+    up and the repository root - which holds ``Data/`` and ``Deliverables/`` -
+    is one above that.
+    """
     ctx = dbutils.notebook.entry_point.getDbutils().notebook().getContext()
-    notebook_path = ctx.notebookPath().get()
-    return Path("/Workspace" + notebook_path).resolve().parent.parent
+    here = Path("/Workspace" + ctx.notebookPath().get()).resolve()
+    code_root = here.parent.parent
+    return code_root, code_root.parent
 
 
-ROOT = repo_root()
-sys.path.insert(0, str(ROOT / "src"))
+CODE_ROOT, REPO_ROOT = roots()
+sys.path.insert(0, str(CODE_ROOT / "src"))
 
 from skills_analysis import config as cfg  # noqa: E402
 
-print(f"Repo root      : {ROOT}")
+print(f"Repo root      : {REPO_ROOT}")
+print(f"Code root      : {CODE_ROOT}")
 print(f"Catalog        : {cfg.CATALOG}")
 print(f"Analysis as-of : {cfg.AS_OF_DATE}")
 
@@ -75,13 +82,13 @@ dbutils.fs.mkdirs(f"{VOLUME_ROOT}/source")
 dbutils.fs.mkdirs(f"{VOLUME_ROOT}/reference")
 
 for source in cfg.SOURCE_FILES:
-    src = ROOT / "data" / "raw" / source.filename
+    src = REPO_ROOT / "Data" / "raw" / source.filename
     dst = f"{VOLUME_ROOT}/source/{source.filename}"
     shutil.copyfile(src, dst)
     print(f"  {source.system:22s} -> {source.filename}")
 
 for name in cfg.REFERENCE_FILES:
-    shutil.copyfile(ROOT / "data" / "reference" / name, f"{VOLUME_ROOT}/reference/{name}")
+    shutil.copyfile(REPO_ROOT / "Data" / "reference" / name, f"{VOLUME_ROOT}/reference/{name}")
     print(f"  reference              -> {name}")
 
 # COMMAND ----------

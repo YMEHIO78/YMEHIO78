@@ -73,7 +73,7 @@ resources:
   dashboards:
     skills_intelligence:
       display_name: "Skills Intelligence"
-      file_path: ../dashboards/skills_intelligence.lvdash.json
+      file_path: ../../Deliverables/skills_intelligence.lvdash.json
       warehouse_id: ${var.warehouse_id}
       # Keep the deployed copy authoritative: a change made in the UI is
       # overwritten on the next deploy rather than silently diverging from git.
