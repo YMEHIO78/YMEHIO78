@@ -278,13 +278,25 @@ def build_report(tables: dict[str, pd.DataFrame], as_of: date | None = None) -> 
     legacy_count = int(split["legacy_worker_ids"].astype(str).str.count(";").add(1).sum())
     total_identifiers = len(workers) + legacy_count
     zero_fresh = scorecard[scorecard["profile_freshness_pct"].fillna(0) == 0]
+
+    acquired = split[split["is_acquired_employee"]]
+    acquired_names = _join_names(list(acquired["worker_name"]))
+    hidden_years = sorted(
+        (later - earlier).days / 365.25
+        for later, earlier in zip(acquired["workday_hire_date"], acquired["original_hire_date"])
+    )
+    hidden_span = (
+        f"{hidden_years[0]:.1f} years" if len(hidden_years) == 1
+        else f"{hidden_years[0]:.1f} to {hidden_years[-1]:.1f} years"
+    )
     split_rows = [[
         f"<strong>{_e(r['worker_name'])}</strong>",
         f"<code>{_e(r['legacy_worker_ids'])}</code> &rarr; <code>{_e(r['employee_id'])}</code>",
         _e(r["supervisory_org"]),
         ("Acquisition tenure understated by "
          f"{_years(r['workday_hire_date'], r['original_hire_date'])}"
-         if r["is_acquired_employee"] else "Truncated identifier on three rows"),
+         if r["is_acquired_employee"]
+         else "Truncated employee ID carried on this worker's Workday rows"),
     ] for _, r in split.iterrows()]
 
     # --- section 2: critical skill depth --------------------------------
@@ -402,14 +414,11 @@ def build_report(tables: dict[str, pd.DataFrame], as_of: date | None = None) -> 
   one of which is an Excel serial number that decoded to a date two years in the past.
 </p>
 <p>
-  Two people also carry the wrong start date. Marcus Whitfield and Soo-Jin Kim joined
-  through the Splunk acquisition, and Workday records the March 2024 migration date as
-  their hire date. Their real tenure is
-  <strong>{_years(split[split["is_acquired_employee"]]["workday_hire_date"].iloc[0],
-                  split[split["is_acquired_employee"]]["original_hire_date"].iloc[0])}
-  longer</strong> than the system says. They are also the only two people with any depth
-  in Splunk &mdash; so the retention risk the tenure figure would flag is exactly the risk
-  it hides.
+  {_count_word(len(acquired))} people also carry the wrong start date. {acquired_names}
+  joined through the Splunk acquisition, and Workday records the migration date as their
+  hire date. Their real tenure is <strong>{hidden_span} longer</strong> than the system
+  says. They are also the only people with any depth in Splunk &mdash; so the retention
+  risk the tenure figure would flag is exactly the risk it hides.
 </p>
 
 <h2>2 &middot; {len(exposed)} of {len(critical)} critical skills have no backup</h2>
@@ -548,6 +557,15 @@ def build_report(tables: dict[str, pd.DataFrame], as_of: date | None = None) -> 
   pipeline notebooks against the same source files.
 </footer>
 </div></body></html>"""
+
+
+def _join_names(names: list[str]) -> str:
+    """Oxford-free list: 'A', 'A and B', 'A, B and C'."""
+    if not names:
+        return ""
+    if len(names) == 1:
+        return _e(names[0])
+    return _e(", ".join(names[:-1])) + " and " + _e(names[-1])
 
 
 def _count_word(n: int) -> str:
