@@ -1,0 +1,80 @@
+resources:
+  jobs:
+    skills_analysis_pipeline:
+      name: "Skills analysis - bronze to gold to report"
+      description: >-
+        Reconciles the Workday skills extract, Degreed completions, the
+        recertification tracker and the team skills matrix into one set of
+        analytics tables, then renders the findings report.
+
+      # Tasks run on serverless compute. To pin classic compute instead, add a
+      # job_clusters block and give each task a job_cluster_key.
+      tasks:
+        - task_key: setup_catalog
+          description: Create the catalog, schemas and volume; land the source files.
+          notebook_task:
+            notebook_path: ../notebooks/00_setup_catalog.py
+            base_parameters:
+              catalog: ${var.catalog}
+
+        - task_key: ingest_bronze
+          description: Land each export verbatim as a Delta table.
+          depends_on:
+            - task_key: setup_catalog
+          notebook_task:
+            notebook_path: ../notebooks/01_ingest_bronze.py
+            base_parameters:
+              catalog: ${var.catalog}
+
+        - task_key: build_silver
+          description: Resolve identities, conform ratings, deduplicate, log every repair.
+          depends_on:
+            - task_key: ingest_bronze
+          notebook_task:
+            notebook_path: ../notebooks/02_build_silver.py
+            base_parameters:
+              catalog: ${var.catalog}
+              as_of_date: ${var.as_of_date}
+
+        - task_key: build_gold
+          description: Build the analytics tables behind the report and dashboard.
+          depends_on:
+            - task_key: build_silver
+          notebook_task:
+            notebook_path: ../notebooks/03_build_gold.py
+            base_parameters:
+              catalog: ${var.catalog}
+              as_of_date: ${var.as_of_date}
+
+        - task_key: publish_report
+          description: Run the exploratory analysis and write the findings report.
+          depends_on:
+            - task_key: build_gold
+          notebook_task:
+            notebook_path: ../notebooks/04_exploratory_skills_report.py
+            base_parameters:
+              catalog: ${var.catalog}
+              as_of_date: ${var.as_of_date}
+
+      # The source exports are refreshed monthly; the schedule is paused until
+      # someone points it at a real feed rather than uploaded files.
+      schedule:
+        quartz_cron_expression: "0 0 7 1 * ?"
+        timezone_id: "UTC"
+        pause_status: PAUSED
+
+      email_notifications:
+        on_failure:
+          - ${var.notification_email}
+
+      queue:
+        enabled: true
+
+  dashboards:
+    skills_intelligence:
+      display_name: "Skills Intelligence"
+      file_path: ../dashboards/skills_intelligence.lvdash.json
+      warehouse_id: ${var.warehouse_id}
+      # Keep the deployed copy authoritative: a change made in the UI is
+      # overwritten on the next deploy rather than silently diverging from git.
+      embed_credentials: false

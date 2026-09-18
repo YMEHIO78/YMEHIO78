@@ -1,0 +1,40 @@
+canonical_skill,is_critical,rationale
+VXLAN EVPN,true,Core data-centre fabric skill for Enterprise Switching
+NX-OS,true,Core switching platform skill
+Catalyst Center,true,Primary management platform across CX and Sales Engineering
+SD-WAN,true,Top customer-facing architecture in CX and Partner Enablement
+Cisco Secure Firewall,true,Anchor skill for the Security Business Group
+Splunk Enterprise Security,true,Revenue-linked Splunk content ownership
+Splunk SPL,true,Underpins all Observability delivery
+Kubernetes,true,Platform dependency for Meraki Cloud and Observability
+Terraform,true,Infrastructure-as-code dependency for the CI/CD migration
+Python,true,Automation baseline across every engineering org
+ACI,true,Data-centre architecture skill used in CX Americas
+ThousandEyes,true,Assurance skill attached to active CX engagements
+Zero Trust Architecture,true,Strategic security architecture skill
+Cisco IOS XE,true,Baseline platform skill for Sales Engineering
+BGP,true,Baseline routing skill for CX network consulting
+Meraki,false,Broad platform familiarity - not a scarce specialist skill
+Go,false,Secondary language - limited blast radius
+Ruby,false,Single-team language
+CI/CD Pipelines,false,Covered by the platform team
+Ansible,false,Substitutable with other automation tooling
+REST API Development,false,General engineering skill
+Meraki Dashboard API,false,Narrow programmability skill
+Catalyst 9000 Platform,false,Hardware platform familiarity
+MPLS,false,Legacy transport skill in managed decline
+Wireless,false,Covered by a dedicated wireless practice
+AppDynamics,false,Secondary observability tool
+Duo Security,false,Operationally simple product
+Secure Network Analytics,false,Secondary security product
+Secure Workload,false,Secondary security product
+Umbrella,false,Secondary security product
+Secure Client,false,Endpoint client - low specialist depth
+Webex Suite,false,Broad familiarity expected
+SIP / Voice Protocols,false,Mature skill with stable demand
+Engineering Leadership,false,Professional skill - tracked separately
+Customer Success Management,false,Professional skill - tracked separately
+Services Delivery Management,false,Professional skill - tracked separately
+Partner Enablement,false,Professional skill - tracked separately
+ACI / NX-OS (conflated),false,Ambiguous source column - excluded from coverage until the matrix splits it
+Onboarding,false,Not a skill

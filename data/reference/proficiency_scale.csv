@@ -1,0 +1,27 @@
+raw_value,proficiency,confidence,notes
+5 - expert,5,high,Workday native scale
+4 - advanced,4,high,Workday native scale
+3 - intermediate,3,high,Workday native scale
+2 - beginner,2,high,Workday native scale
+1 - novice,1,high,Workday native scale
+5,5,high,Bare numeric on the same 1-5 scale
+4,4,high,Bare numeric on the same 1-5 scale
+3,3,high,Bare numeric on the same 1-5 scale
+2,2,high,Bare numeric on the same 1-5 scale
+1,1,high,Bare numeric on the same 1-5 scale
+expert,5,medium,Free-text rating
+expert!!,5,medium,Free-text rating
+advanced,4,medium,Free-text rating
+intermediate,3,medium,Free-text rating
+beginner,2,medium,Free-text rating
+h,4,low,Legacy high/medium/low scale mapped onto 1-5 - approximation
+m,3,low,Legacy high/medium/low scale mapped onto 1-5 - approximation
+l,2,low,Legacy high/medium/low scale mapped onto 1-5 - approximation
+no,1,low,"Matrix legend: red = no exposure; treated as 1"
+3 (was 2),3,medium,Current value with edit history typed into the cell
+not rated,,none,Explicitly unrated
+n/a,,none,Not applicable
+na,,none,Not applicable
+x,,none,"Matrix legend flags X as unknown usage"
+?,,none,Unknown
+-,,none,Unknown

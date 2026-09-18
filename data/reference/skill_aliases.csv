@@ -1,0 +1,68 @@
+raw_skill,canonical_skill,skill_domain,notes
+python,Python,Programming & Automation,
+python (programming language),Python,Programming & Automation,
+python 3,Python,Programming & Automation,
+go,Go,Programming & Automation,
+go (programming language),Go,Programming & Automation,
+ruby,Ruby,Programming & Automation,
+ansible,Ansible,Programming & Automation,
+ci/cd pipelines,CI/CD Pipelines,Programming & Automation,
+rest api development,REST API Development,Programming & Automation,
+terraform,Terraform,Cloud & Infrastructure,
+hashicorp terraform,Terraform,Cloud & Infrastructure,
+terraform/iac,Terraform,Cloud & Infrastructure,matrix column header
+kubernetes,Kubernetes,Cloud & Infrastructure,
+kubernetes (k8s),Kubernetes,Cloud & Infrastructure,
+k8s,Kubernetes,Cloud & Infrastructure,matrix column header
+cisco dna center,Catalyst Center,Networking,product renamed DNA Center -> Catalyst Center
+dna center,Catalyst Center,Networking,product renamed DNA Center -> Catalyst Center
+dnac,Catalyst Center,Networking,product renamed DNA Center -> Catalyst Center
+catalyst center,Catalyst Center,Networking,
+catalyst ctr (dnac),Catalyst Center,Networking,matrix column header
+cisco ios xe,Cisco IOS XE,Networking,
+ios xe,Cisco IOS XE,Networking,
+nx-os,NX-OS,Networking,
+vxlan evpn,VXLAN EVPN,Networking,
+bgp,BGP,Networking,
+border gateway protocol,BGP,Networking,
+mpls,MPLS,Networking,
+application centric infrastructure,ACI,Networking,
+aci,ACI,Networking,
+aci / nx-os,ACI / NX-OS (conflated),Networking,"Matrix column covers two distinct skills - cannot be attributed to either, excluded from coverage"
+catalyst 9000 platform,Catalyst 9000 Platform,Networking,
+sd-wan,SD-WAN,Networking,
+catalyst sd-wan,SD-WAN,Networking,
+sd-wan (viptela),SD-WAN,Networking,Viptela is the acquired origin of Catalyst SD-WAN
+meraki,Meraki,Networking,
+meraki dashboard,Meraki,Networking,
+meraki dashboard api,Meraki Dashboard API,Programming & Automation,kept separate from Meraki - programmability skill not platform skill
+wireless,Wireless,Networking,
+wireless (wi-fi 6e),Wireless,Networking,
+thousandeyes,ThousandEyes,Observability,
+thousand eyes,ThousandEyes,Observability,
+1000 eyes,ThousandEyes,Observability,
+appdynamics,AppDynamics,Observability,
+splunk spl,Splunk SPL,Observability,
+splunk search,Splunk SPL,Observability,
+splunk enterprise security,Splunk Enterprise Security,Observability,
+splunk es,Splunk Enterprise Security,Observability,
+firepower,Cisco Secure Firewall,Security,Firepower is the former name of Secure Firewall
+cisco secure firewall,Cisco Secure Firewall,Security,
+secure firewall,Cisco Secure Firewall,Security,
+duo security,Duo Security,Security,
+stealthwatch,Secure Network Analytics,Security,Stealthwatch renamed Secure Network Analytics
+secure network analytics,Secure Network Analytics,Security,
+zero trust architecture,Zero Trust Architecture,Security,
+zero trust,Zero Trust Architecture,Security,
+secure workload,Secure Workload,Security,
+umbrella,Umbrella,Security,
+secure client,Secure Client,Security,
+webex suite,Webex Suite,Collaboration,
+webex,Webex Suite,Collaboration,
+sip / voice protocols,SIP / Voice Protocols,Collaboration,
+sip,SIP / Voice Protocols,Collaboration,
+engineering leadership,Engineering Leadership,Professional,
+customer success management,Customer Success Management,Professional,
+services delivery management,Services Delivery Management,Professional,
+partner enablement,Partner Enablement,Professional,
+onboarding,Onboarding,Professional,non-skill learning tag - excluded from skill analytics

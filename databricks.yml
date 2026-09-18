@@ -1,0 +1,46 @@
+# Databricks Asset Bundle for the skills intelligence pipeline.
+#
+#   databricks bundle validate -t dev
+#   databricks bundle deploy   -t dev
+#   databricks bundle run skills_analysis_pipeline -t dev
+#
+# Deploys the notebooks, the job that chains them, and the AI/BI dashboard.
+bundle:
+  name: skills_analysis
+
+variables:
+  catalog:
+    description: Unity Catalog to create and write into.
+    default: skills_analysis
+  as_of_date:
+    description: >-
+      Date the analysis is run as-of. Pinned rather than taken from the wall
+      clock so expiry and staleness figures are reproducible across re-runs.
+    default: "2026-09-01"
+  warehouse_id:
+    description: >-
+      SQL warehouse backing the dashboard. Find it under SQL Warehouses in the
+      workspace, or run: databricks warehouses list
+    default: ""
+  notification_email:
+    description: Address to notify when the scheduled run fails.
+    default: ""
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog: skills_analysis_dev
+
+  prod:
+    mode: production
+    variables:
+      catalog: skills_analysis
+    # In production the job and dashboard are owned by a service principal
+    # rather than whoever last deployed. Set run_as before using this target.
+    # run_as:
+    #   service_principal_name: "<application-id>"

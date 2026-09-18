@@ -1,0 +1,77 @@
+source_system,source_key,employee_id,resolution_reason
+workday,44102,1044102,Truncated employee ID - leading 10 dropped on Wei-Lin Chen rows
+workday,SPLK-0227,1048893,Legacy Splunk worker ID for Marcus Whitfield retained on one pre-migration row
+workday,SPLK-0314,1041555,Legacy Splunk worker ID for Soo-Jin Kim retained on one pre-migration row
+degreed,okonkwe@cisco.com,1043915,
+degreed,chenwe4@cisco.com,1044102,
+degreed,44102,1044102,Column shift - employee ID landed in the email column
+degreed,nakamuy@cisco.com,1039874,
+degreed,brennak@cisco.com,1047731,
+degreed,CISCO\delgadj,1045620,Windows domain account format instead of email
+degreed,delgadj@cisco.com,1045620,
+degreed,mwhitfield@splunk.com,1048893,Legacy Splunk tenant email - same person as whitfim@cisco.com
+degreed,whitfim@cisco.com,1048893,
+degreed,petrovi@cisco.com,1042066,
+degreed,ahmeds2@cisco.com,1049510,
+degreed,olearyd,1038442,Username in the employee ID column with no email present
+degreed,olearyd@cisco.com,1038442,
+degreed,ramachp@cisco.com,1050112,
+degreed,boatenk@cisco.com,1046338,
+degreed,lindqve@cisco.com,1043780,
+degreed,carterj4@cisco.com,1051004,
+degreed,maldonr@cisco.com,1037215,
+degreed,vol@cisco.com,1053771,
+degreed,schmidg@cisco.com,1044999,
+degreed,achebn@cisco.com,1048120,
+degreed,skim@splunk.com,1041555,Legacy Splunk tenant email - same person as kimsj@cisco.com
+degreed,kimsj@cisco.com,1041555,
+degreed,fitzgep@external.cisco.com,1054332,Contingent worker - external mail domain
+degreed,baptism@cisco.com,1039001,
+degreed,hargrot@cisco.com,1050877,
+degreed,duboisa@cisco.com,1047009,
+degreed,jmartin9@cisco.com,,Not in the Workday population for this report - Talent Acquisition org
+degreed,rsandoval@partner-nwsystems.com,,External partner - not a worker
+recert,"Okonkwo, Mike",1043915,Preferred name Mike vs legal name Emeka
+recert,"Okonkwo, Emeka",1043915,
+recert,chenwe4,1044102,Username used instead of a name
+recert,"Chen, Wei-Lin",1044102,
+recert,"Nakamura, Yuki",1039874,
+recert,Yuki N.,1039874,Abbreviated surname - cannot be derived from name order alone
+recert,"Brennan, Katie",1047731,Preferred name Katie vs legal name Kathleen
+recert,"Delgado, Jose",1045620,
+recert,"Whitfield, Marcus",1048893,
+recert,"Petrov, Ivana",1042066,
+recert,ahmeds2@cisco.com,1049510,Email used instead of a name
+recert,"O'Leary, Danny",1038442,Preferred name Danny vs legal name Daniel
+recert,"Ramachandran, Priya",1050112,
+recert,"Boateng, Kwame",1046338,
+recert,"Lindqvist, Erik",1043780,
+recert,"Carter-Bloom, Jasmine",1051004,
+recert,"Maldonado, Rosa",1037215,
+recert,"Vo, Alex",1053771,Preferred name Alex vs legal name Long
+recert,"Fitzgerald, Pat",1054332,Preferred name Pat vs legal name Patrick
+recert,"Kim, SJ",1041555,Initials used instead of legal name Soo-Jin
+recert,"Baptiste, MC",1039001,Initials used instead of legal name Marie-Claire
+recert,"Hargrove, Tyler",1050877,
+recert,"Dubois, Amelie",1047009,Accent dropped from Amelie
+recert,partner SE (NW Systems),,External partner - not a worker
+recert,Jen M. (temp),,Not in the Workday population for this report - Talent Acquisition org
+matrix,Mike Okonkwo,1043915,Preferred name Mike vs legal name Emeka
+matrix,Wei-Lin Chen,1044102,
+matrix,Yuki Nakamura,1039874,
+matrix,Katie B.,1047731,
+matrix,Jose Delgado,1045620,
+matrix,Marcus Whitfield,1048893,
+matrix,Ivana Petrov,1042066,
+matrix,Sana Ahmed,1049510,
+matrix,Danny OLeary,1038442,Apostrophe dropped from O'Leary
+matrix,Priya Ramachandran,1050112,
+matrix,Kwame Boateng,1046338,
+matrix,Erik Lindqvist,1043780,
+matrix,Jazz Carter,1051004,Preferred name Jazz vs legal name Jasmine
+matrix,SJ Kim,1041555,
+matrix,Rosa Maldonado,1037215,
+matrix,Alex Vo,1053771,
+matrix,Pat Fitzgerald,1054332,
+matrix,Jen (temp from Talent Acq),,Not in the Workday population for this report - Talent Acquisition org
+matrix,R. Sandoval,,External partner - not a worker
