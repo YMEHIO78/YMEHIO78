@@ -1,0 +1,91 @@
+employee_id,skill,proficiency,last_assessed
+1001,BGP / Routing,5,2026-04-13
+1001,Network Automation,4,2026-02-06
+1001,Python,4,2025-11-24
+1002,BGP / Routing,4,2026-07-22
+1002,Python,3,2026-04-25
+1002,Observability,3,2026-03-25
+1003,BGP / Routing,4,2026-05-08
+1003,Network Automation,4,2025-12-14
+1003,Python,3,2026-04-08
+1004,BGP / Routing,3,2026-08-18
+1004,Network Automation,2,2026-07-29
+1004,Observability,2,2025-11-18
+1005,BGP / Routing,2,2026-07-09
+1005,Python,2,2026-02-09
+1005,Observability,2,2026-07-09
+1006,Network Automation,4,2026-04-07
+1006,Python,4,2026-02-17
+1006,Terraform,3,2026-07-30
+1007,BGP / Routing,2,2026-08-25
+1007,Observability,3,2026-09-02
+1007,Python,2,2026-05-16
+1008,Kubernetes,5,2026-05-18
+1008,Terraform,4,2026-08-07
+1008,Python,5,2026-01-05
+1009,Kubernetes,3,2026-02-22
+1009,Terraform,4,2026-02-11
+1009,Python,4,2026-01-31
+1010,Kubernetes,3,2026-07-27
+1010,Observability,3,2025-11-17
+1010,Python,4,2026-05-24
+1011,Kubernetes,2,2026-04-17
+1011,Terraform,2,2026-03-14
+1011,Python,3,2026-07-20
+1012,Kubernetes,2,2026-03-27
+1012,Observability,2,2026-03-16
+1012,Python,2,2026-08-26
+1013,Kubernetes,3,2026-02-05
+1013,Terraform,3,2026-07-04
+1013,Observability,3,2026-06-26
+1014,Zero Trust,5,2026-04-29
+1014,Cloud Security,4,2026-07-13
+1014,Python,3,2026-08-28
+1015,Cloud Security,4,2026-08-03
+1015,Incident Response,4,2026-01-07
+1015,Python,3,2025-12-27
+1016,Zero Trust,3,2026-06-04
+1016,Incident Response,4,2025-11-20
+1016,Cloud Security,3,2026-05-29
+1017,Cloud Security,3,2026-01-16
+1017,Incident Response,3,2025-12-16
+1017,Zero Trust,2,2026-05-28
+1018,Cloud Security,2,2026-06-27
+1018,Zero Trust,2,2026-01-31
+1018,Python,2,2026-02-18
+1019,Incident Response,4,2026-07-05
+1019,Cloud Security,3,2026-02-12
+1019,Observability,3,2026-01-30
+1020,Incident Response,4,2026-05-17
+1020,Network Automation,3,2026-09-02
+1020,SQL,4,2026-04-17
+1021,SQL,4,2025-11-03
+1021,Observability,3,2026-03-31
+1021,Incident Response,3,2026-08-23
+1022,SQL,4,2026-05-18
+1022,Network Automation,3,2026-05-30
+1022,Observability,2,2026-02-13
+1023,SQL,3,2025-10-29
+1023,Incident Response,3,2025-11-11
+1023,Observability,2,2026-07-13
+1024,SQL,2,2026-08-12
+1024,Network Automation,2,2026-06-20
+1024,Observability,2,2026-05-16
+1025,Incident Response,3,2026-01-19
+1025,SQL,3,2026-04-23
+1025,Network Automation,4,2026-08-29
+1026,SQL,5,2026-03-18
+1026,Python,5,2026-04-04
+1026,Observability,3,2026-02-17
+1027,SQL,4,2026-07-27
+1027,Python,4,2026-07-26
+1027,Terraform,2,2026-07-18
+1028,SQL,4,2026-05-19
+1028,Python,3,2025-11-08
+1028,Observability,3,2026-05-01
+1029,SQL,3,2026-08-26
+1029,Python,2,2025-10-30
+1029,Observability,2,2026-02-26
+1030,SQL,3,2026-02-24
+1030,Python,2,2026-01-13
+1030,Observability,2,2026-06-29

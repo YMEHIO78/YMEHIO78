@@ -1,0 +1,41 @@
+employee_id,course,skill,hours,completed_on
+1001,Advanced Python Patterns,Python,10,2025-11-11
+1002,Ansible for Networks,Network Automation,6,2026-05-03
+1003,Python for Automation,Python,8,2025-11-17
+1003,Ansible for Networks,Network Automation,8,2026-08-15
+1004,Routing Troubleshooting,BGP / Routing,8,2026-08-29
+1005,Routing Troubleshooting,BGP / Routing,7,2026-03-08
+1006,Python for Automation,Python,12,2026-02-22
+1006,Network CI/CD,Network Automation,10,2026-04-16
+1008,Python for Automation,Python,14,2025-10-21
+1009,Python for Automation,Python,10,2026-04-01
+1009,Terraform at Scale,Terraform,6,2026-06-29
+1010,Python for Automation,Python,12,2025-10-30
+1011,Python for Automation,Python,8,2026-06-02
+1012,Testing in Python,Python,10,2025-10-20
+1012,Kubernetes Basics,Kubernetes,6,2026-01-04
+1013,Terraform Foundations,Terraform,6,2026-03-22
+1015,Blameless Postmortems,Incident Response,8,2026-05-14
+1016,Incident Command Essentials,Incident Response,10,2025-11-25
+1017,Incident Command Essentials,Incident Response,8,2026-04-17
+1017,Cloud Security Foundations,Cloud Security,6,2026-08-21
+1018,Cloud Security Foundations,Cloud Security,6,2025-11-05
+1018,Zero Trust Primer,Zero Trust,4,2026-04-01
+1019,Incident Command Essentials,Incident Response,6,2026-05-26
+1020,SQL Performance Tuning,SQL,10,2026-02-04
+1020,Blameless Postmortems,Incident Response,8,2026-08-03
+1021,SQL Performance Tuning,SQL,12,2026-07-16
+1022,Ansible for Networks,Network Automation,8,2025-12-10
+1022,Window Functions,SQL,10,2026-08-19
+1023,SQL Performance Tuning,SQL,8,2026-04-30
+1024,Analytical SQL Deep Dive,SQL,6,2026-02-19
+1025,Window Functions,SQL,8,2026-02-04
+1025,Blameless Postmortems,Incident Response,6,2026-02-09
+1025,Network CI/CD,Network Automation,8,2026-07-22
+1026,Analytical SQL Deep Dive,SQL,10,2025-12-30
+1026,Testing in Python,Python,16,2026-05-30
+1027,Terraform Foundations,Terraform,6,2025-11-09
+1027,Advanced Python Patterns,Python,12,2026-02-21
+1028,SQL Performance Tuning,SQL,8,2025-12-15
+1029,Python for Automation,Python,8,2025-11-02
+1030,SQL Performance Tuning,SQL,6,2026-08-03

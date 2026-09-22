@@ -1,0 +1,23 @@
+employee_id,certification,cost_usd,expires_on
+1001,CCIE Enterprise Infrastructure,1600,2027-11-16
+1002,CCNP Enterprise,800,2026-08-08
+1003,CCNP Enterprise,800,2026-11-22
+1004,CCNA,300,2028-03-15
+1006,CCNP Enterprise,800,2027-04-20
+1008,Certified Kubernetes Administrator,395,2026-12-05
+1009,Terraform Associate,70,2027-07-19
+1009,Certified Kubernetes Administrator,395,2028-06-23
+1010,AWS Solutions Architect,150,2027-02-27
+1011,Terraform Associate,70,2029-02-18
+1013,AWS Solutions Architect,150,2026-05-25
+1014,CISSP,749,2027-08-23
+1015,CISSP,749,2026-12-19
+1016,CCNP Security,800,2028-08-12
+1017,AWS Security Specialty,300,2027-05-20
+1019,CISSP,749,2029-03-20
+1020,CCNP Enterprise,800,2026-11-08
+1021,Splunk Core Certified Power User,130,2028-02-04
+1025,CCNA,300,2028-10-21
+1026,Databricks Data Engineer Associate,200,2027-10-17
+1027,Databricks Data Engineer Associate,200,2028-06-03
+1028,AWS Solutions Architect,150,2029-07-08

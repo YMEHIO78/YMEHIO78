@@ -1,0 +1,31 @@
+employee_id,name,team,role,hire_date
+1001,Maya Restrepo,Network Engineering,Network Architect,2015-08-28
+1002,Daniel Osei,Network Engineering,Senior Network Engineer,2018-09-28
+1003,Priya Raman,Network Engineering,Senior Network Engineer,2019-08-15
+1004,Tomas Lindgren,Network Engineering,Network Engineer,2022-09-28
+1005,Aisha Bakari,Network Engineering,Network Engineer,2023-10-07
+1006,Henrik Sole,Network Engineering,Senior Network Engineer,2017-03-26
+1007,Carla Mendez,Network Engineering,Network Engineer,2024-09-16
+1008,Rohan Varma,Cloud Platform,SRE,2019-11-20
+1009,Elena Pavlova,Cloud Platform,Senior Platform Engineer,2020-03-04
+1010,Marcus Bell,Cloud Platform,Senior Platform Engineer,2021-08-10
+1011,Yuki Tanaka,Cloud Platform,Platform Engineer,2023-03-03
+1012,Sofia Duarte,Cloud Platform,Platform Engineer,2024-09-26
+1013,Omar Haddad,Cloud Platform,SRE,2016-12-21
+1014,Greta Ahlberg,Security,Security Architect,2017-01-20
+1015,Nathan Ifeanyi,Security,Senior Security Engineer,2020-07-15
+1016,Leila Farsi,Security,Senior Security Engineer,2021-11-24
+1017,Peter Nowak,Security,Security Engineer,2023-10-21
+1018,Amara Nwosu,Security,Security Engineer,2024-03-20
+1019,Jonas Weber,Security,Senior Security Engineer,2018-01-27
+1020,Isabel Ortiz,Customer Success,Technical Account Manager,2016-09-03
+1021,Kofi Mensah,Customer Success,Senior Solutions Engineer,2019-01-02
+1022,Hannah Brecht,Customer Success,Senior Solutions Engineer,2021-04-08
+1023,Ravi Chandra,Customer Success,Solutions Engineer,2023-10-01
+1024,Noor Al-Amin,Customer Success,Solutions Engineer,2024-08-11
+1025,Felix Andersen,Customer Success,Senior Solutions Engineer,2020-08-19
+1026,Lucia Ferrari,Data & Analytics,Analytics Engineer,2018-04-17
+1027,Samuel Boateng,Data & Analytics,Senior Data Engineer,2020-04-21
+1028,Mei Lin Chow,Data & Analytics,Senior Data Engineer,2022-05-16
+1029,Diego Salas,Data & Analytics,Data Engineer,2024-01-22
+1030,Freya Holmgren,Data & Analytics,Data Engineer,2025-02-15

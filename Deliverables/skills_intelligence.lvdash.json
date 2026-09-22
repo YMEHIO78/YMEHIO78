@@ -1,90 +1,22 @@
 {
   "datasets": [
     {
-      "name": "ds_worker_base",
-      "displayName": "Worker profile and learning base",
+      "name": "ds_coverage",
+      "displayName": "Skill coverage",
       "queryLines": [
-        "SELECT",
-        "  w.employee_id,",
-        "  w.worker_name,",
-        "  w.supervisory_org,",
-        "  w.location,",
-        "  w.worker_status,",
-        "  CASE WHEN fresh.employee_id IS NOT NULL THEN 1 ELSE 0 END AS has_current_profile,",
-        "  CASE WHEN learn.employee_id IS NOT NULL THEN 1 ELSE 0 END AS has_recent_learning",
-        "FROM skills_analysis.silver.worker w",
-        "LEFT JOIN (",
-        "  SELECT DISTINCT employee_id FROM skills_analysis.gold.worker_skill_profile WHERE is_current",
-        ") fresh ON fresh.employee_id = w.employee_id",
-        "LEFT JOIN (",
-        "  SELECT DISTINCT employee_id FROM skills_analysis.silver.learning_completion WHERE is_recent",
-        ") learn ON learn.employee_id = w.employee_id",
-        "WHERE w.in_headcount"
+        "SELECT skill, people, deep_practitioners, avg_proficiency, learning_hours,",
+        "       is_critical, held_by,",
+        "       CASE WHEN is_critical AND deep_practitioners <= 1 THEN 1 ELSE 0 END AS no_backup",
+        "FROM skills_analysis.main.skill_coverage"
       ]
     },
     {
-      "name": "ds_cert_risk",
-      "displayName": "Certification risk",
+      "name": "ds_certifications",
+      "displayName": "Certifications",
       "queryLines": [
-        "SELECT",
-        "  worker_name,",
-        "  supervisory_org,",
-        "  certification,",
-        "  cert_status,",
-        "  expires_on,",
-        "  days_to_expiry,",
-        "  risk_band,",
-        "  coalesce(voucher_cost, 0) AS voucher_cost,",
-        "  on_approved_cert_list,",
-        "  CASE WHEN is_at_risk THEN 1 ELSE 0 END AS at_risk",
-        "FROM skills_analysis.gold.cert_compliance",
-        "WHERE in_headcount"
-      ]
-    },
-    {
-      "name": "ds_critical_skills",
-      "displayName": "Critical skill coverage",
-      "queryLines": [
-        "SELECT",
-        "  canonical_skill,",
-        "  skill_domain,",
-        "  people_with_skill,",
-        "  deep_practitioners,",
-        "  people_with_skill - deep_practitioners AS claim_without_depth,",
-        "  avg_proficiency,",
-        "  risk_band,",
-        "  deep_practitioner_names,",
-        "  criticality_rationale,",
-        "  CASE WHEN is_single_point_of_failure THEN 1 ELSE 0 END AS no_backup",
-        "FROM skills_analysis.gold.skill_coverage",
-        "WHERE is_critical_skill"
-      ]
-    },
-    {
-      "name": "ds_org_scorecard",
-      "displayName": "Organisation scorecard",
-      "queryLines": [
-        "SELECT",
-        "  supervisory_org,",
-        "  headcount,",
-        "  profile_freshness_pct,",
-        "  profile_coverage_pct,",
-        "  learning_engagement_pct,",
-        "  certs_at_risk,",
-        "  avg_days_since_skill_update",
-        "FROM skills_analysis.gold.org_scorecard"
-      ]
-    },
-    {
-      "name": "ds_data_quality",
-      "displayName": "Data quality issues",
-      "queryLines": [
-        "SELECT",
-        "  source_system,",
-        "  issue_type,",
-        "  severity,",
-        "  issue_count",
-        "FROM skills_analysis.gold.data_quality_summary"
+        "SELECT name, team, certification, cost_usd, expires_on, days_to_expiry, risk_band,",
+        "       CASE WHEN days_to_expiry <= 90 THEN 1 ELSE 0 END AS at_risk",
+        "FROM skills_analysis.main.certifications"
       ]
     }
   ],
@@ -96,7 +28,7 @@
         {
           "widget": {
             "name": "header",
-            "textbox_spec": "# Skills Intelligence\n\nFour metrics worth watching every week, reconciled across Workday, Degreed, the recertification tracker and the team skills matrix. **Population:** employees with status Active or Leave of Absence \u2014 contingent workers, interns and leavers are excluded so a departure never looks like an improvement.\n\nUse the filters to narrow by organisation or skill domain; every tile below responds to them."
+            "textbox_spec": "# Skills Intelligence\n\nFour numbers worth watching every week, from a 30-person engineering organisation.\n\n**A skill is covered** when more than one person is at proficiency 4+ \u2014 enough to carry it without help. Use the filters to narrow by criticality or team."
           },
           "position": {
             "x": 0,
@@ -107,53 +39,19 @@
         },
         {
           "widget": {
-            "name": "filter_org",
+            "name": "filter_critical",
             "queries": [
               {
-                "name": "filter_query_0",
+                "name": "filter_query",
                 "query": {
-                  "datasetName": "ds_worker_base",
+                  "datasetName": "ds_coverage",
                   "fields": [
                     {
-                      "name": "supervisory_org",
-                      "expression": "`supervisory_org`"
+                      "name": "is_critical",
+                      "expression": "`is_critical`"
                     },
                     {
-                      "name": "supervisory_org_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              },
-              {
-                "name": "filter_query_1",
-                "query": {
-                  "datasetName": "ds_cert_risk",
-                  "fields": [
-                    {
-                      "name": "supervisory_org",
-                      "expression": "`supervisory_org`"
-                    },
-                    {
-                      "name": "supervisory_org_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              },
-              {
-                "name": "filter_query_2",
-                "query": {
-                  "datasetName": "ds_org_scorecard",
-                  "fields": [
-                    {
-                      "name": "supervisory_org",
-                      "expression": "`supervisory_org`"
-                    },
-                    {
-                      "name": "supervisory_org_associativity",
+                      "name": "is_critical_associativity",
                       "expression": "COUNT_IF(`associative_filter_predicate_group`)"
                     }
                   ],
@@ -163,29 +61,19 @@
             ],
             "spec": {
               "version": 2,
-              "widgetType": "filter-multi-select",
+              "widgetType": "filter-single-select",
               "encodings": {
                 "fields": [
                   {
-                    "fieldName": "supervisory_org",
-                    "displayName": "Organisation",
-                    "queryName": "filter_query_0"
-                  },
-                  {
-                    "fieldName": "supervisory_org",
-                    "displayName": "Organisation",
-                    "queryName": "filter_query_1"
-                  },
-                  {
-                    "fieldName": "supervisory_org",
-                    "displayName": "Organisation",
-                    "queryName": "filter_query_2"
+                    "fieldName": "is_critical",
+                    "displayName": "Critical skills only",
+                    "queryName": "filter_query"
                   }
                 ]
               },
               "frame": {
                 "showTitle": true,
-                "title": "Organisation"
+                "title": "Critical skills only"
               }
             }
           },
@@ -198,19 +86,19 @@
         },
         {
           "widget": {
-            "name": "filter_domain",
+            "name": "filter_team",
             "queries": [
               {
-                "name": "filter_query_0",
+                "name": "filter_query",
                 "query": {
-                  "datasetName": "ds_critical_skills",
+                  "datasetName": "ds_certifications",
                   "fields": [
                     {
-                      "name": "skill_domain",
-                      "expression": "`skill_domain`"
+                      "name": "team",
+                      "expression": "`team`"
                     },
                     {
-                      "name": "skill_domain_associativity",
+                      "name": "team_associativity",
                       "expression": "COUNT_IF(`associative_filter_predicate_group`)"
                     }
                   ],
@@ -224,15 +112,15 @@
               "encodings": {
                 "fields": [
                   {
-                    "fieldName": "skill_domain",
-                    "displayName": "Skill domain",
-                    "queryName": "filter_query_0"
+                    "fieldName": "team",
+                    "displayName": "Team",
+                    "queryName": "filter_query"
                   }
                 ]
               },
               "frame": {
                 "showTitle": true,
-                "title": "Skill domain"
+                "title": "Team"
               }
             }
           },
@@ -245,16 +133,16 @@
         },
         {
           "widget": {
-            "name": "kpi_freshness",
+            "name": "kpi_no_backup",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "ds_worker_base",
+                  "datasetName": "ds_coverage",
                   "fields": [
                     {
-                      "name": "profile_freshness_pct",
-                      "expression": "ROUND(100.0 * SUM(`has_current_profile`) / COUNT(`employee_id`), 0)"
+                      "name": "critical_skills_without_backup",
+                      "expression": "SUM(`no_backup`)"
                     }
                   ],
                   "disaggregated": false
@@ -266,15 +154,15 @@
               "widgetType": "counter",
               "encodings": {
                 "value": {
-                  "fieldName": "profile_freshness_pct",
-                  "displayName": "Share of workers whose skill rating was updated in the last 180 days. Target 90%. Everything else on this dashboard is only as good as this number."
+                  "fieldName": "critical_skills_without_backup",
+                  "displayName": "Critical skills with no backup"
                 }
               },
               "frame": {
                 "showTitle": true,
-                "title": "Skill profile freshness %",
+                "title": "Critical skills with no backup",
                 "showDescription": true,
-                "description": "Share of workers whose skill rating was updated in the last 180 days. Target 90%. Everything else on this dashboard is only as good as this number."
+                "description": "Critical skills where one person or nobody is at proficiency 4+. Target 0."
               }
             }
           },
@@ -292,7 +180,7 @@
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "ds_cert_risk",
+                  "datasetName": "ds_certifications",
                   "fields": [
                     {
                       "name": "certifications_at_risk",
@@ -309,14 +197,14 @@
               "encodings": {
                 "value": {
                   "fieldName": "certifications_at_risk",
-                  "displayName": "Expired, expiring within 90 days, or with no expiry recorded. Target 0. Each one has a lead time to fix."
+                  "displayName": "Certifications at risk"
                 }
               },
               "frame": {
                 "showTitle": true,
                 "title": "Certifications at risk",
                 "showDescription": true,
-                "description": "Expired, expiring within 90 days, or with no expiry recorded. Target 0. Each one has a lead time to fix."
+                "description": "Expired, or lapsing within 90 days. Target 0 \u2014 renewals need lead time."
               }
             }
           },
@@ -329,16 +217,16 @@
         },
         {
           "widget": {
-            "name": "kpi_no_backup",
+            "name": "kpi_gap_hours",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "ds_critical_skills",
+                  "datasetName": "ds_coverage",
                   "fields": [
                     {
-                      "name": "critical_skills_without_backup",
-                      "expression": "SUM(`no_backup`)"
+                      "name": "pct_hours_to_exposed_skills",
+                      "expression": "ROUND(100.0 * SUM(CASE WHEN `no_backup` = 1 THEN `learning_hours` ELSE 0 END) / NULLIF(SUM(`learning_hours`), 0), 1)"
                     }
                   ],
                   "disaggregated": false
@@ -350,15 +238,15 @@
               "widgetType": "counter",
               "encodings": {
                 "value": {
-                  "fieldName": "critical_skills_without_backup",
-                  "displayName": "Critical skills held deeply by 1 person or fewer (proficiency 4+). Target 0. This is the metric succession planning actually needs."
+                  "fieldName": "pct_hours_to_exposed_skills",
+                  "displayName": "% of learning hours on exposed skills"
                 }
               },
               "frame": {
                 "showTitle": true,
-                "title": "Critical skills with no backup",
+                "title": "% of learning hours on exposed skills",
                 "showDescription": true,
-                "description": "Critical skills held deeply by 1 person or fewer (proficiency 4+). Target 0. This is the metric succession planning actually needs."
+                "description": "Share of learning time going to the skills that rest on one person or nobody. Should rise until the backup count reaches zero."
               }
             }
           },
@@ -371,16 +259,16 @@
         },
         {
           "widget": {
-            "name": "kpi_learning",
+            "name": "kpi_depth",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "ds_worker_base",
+                  "datasetName": "ds_coverage",
                   "fields": [
                     {
-                      "name": "learning_engagement_pct",
-                      "expression": "ROUND(100.0 * SUM(`has_recent_learning`) / COUNT(`employee_id`), 0)"
+                      "name": "people_at_depth",
+                      "expression": "SUM(`deep_practitioners`)"
                     }
                   ],
                   "disaggregated": false
@@ -392,15 +280,15 @@
               "widgetType": "counter",
               "encodings": {
                 "value": {
-                  "fieldName": "learning_engagement_pct",
-                  "displayName": "Share of workers who completed learning in the last 365 days. Target 80%. The only forward-looking signal here \u2014 it shows whether identified gaps are being closed."
+                  "fieldName": "people_at_depth",
+                  "displayName": "People at proficiency 4+"
                 }
               },
               "frame": {
                 "showTitle": true,
-                "title": "Learning engagement %",
+                "title": "People at proficiency 4+",
                 "showDescription": true,
-                "description": "Share of workers who completed learning in the last 365 days. Target 80%. The only forward-looking signal here \u2014 it shows whether identified gaps are being closed."
+                "description": "Total depth across the skills in view. The number that has to go up for the other three to improve."
               }
             }
           },
@@ -418,11 +306,11 @@
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "ds_critical_skills",
+                  "datasetName": "ds_coverage",
                   "fields": [
                     {
-                      "name": "canonical_skill",
-                      "expression": "`canonical_skill`"
+                      "name": "skill",
+                      "expression": "`skill`"
                     },
                     {
                       "name": "deep_practitioners",
@@ -445,18 +333,18 @@
                   "displayName": "People at proficiency 4+"
                 },
                 "y": {
-                  "fieldName": "canonical_skill",
+                  "fieldName": "skill",
                   "scale": {
                     "type": "categorical"
                   },
-                  "displayName": "Critical skill"
+                  "displayName": "Skill"
                 }
               },
               "frame": {
                 "showTitle": true,
                 "title": "Where capability is concentrated",
                 "showDescription": true,
-                "description": "Bars at zero are skills nobody holds at depth. Bars at one are a single unplanned absence away from a gap."
+                "description": "Bars at zero or one are a single unplanned absence away from a gap."
               }
             }
           },
@@ -469,20 +357,20 @@
         },
         {
           "widget": {
-            "name": "chart_freshness",
+            "name": "chart_hours",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "ds_org_scorecard",
+                  "datasetName": "ds_coverage",
                   "fields": [
                     {
-                      "name": "supervisory_org",
-                      "expression": "`supervisory_org`"
+                      "name": "skill",
+                      "expression": "`skill`"
                     },
                     {
-                      "name": "profile_freshness_pct",
-                      "expression": "AVG(`profile_freshness_pct`)"
+                      "name": "learning_hours",
+                      "expression": "SUM(`learning_hours`)"
                     }
                   ],
                   "disaggregated": false
@@ -494,99 +382,32 @@
               "widgetType": "bar",
               "encodings": {
                 "x": {
-                  "fieldName": "profile_freshness_pct",
+                  "fieldName": "learning_hours",
                   "scale": {
                     "type": "quantitative"
                   },
-                  "displayName": "Profile freshness %"
+                  "displayName": "Learning hours, last 12 months"
                 },
                 "y": {
-                  "fieldName": "supervisory_org",
+                  "fieldName": "skill",
                   "scale": {
                     "type": "categorical"
                   },
-                  "displayName": "Organisation"
+                  "displayName": "Skill"
                 }
               },
               "frame": {
                 "showTitle": true,
-                "title": "Which organisations can be trusted",
+                "title": "Where learning time went",
                 "showDescription": true,
-                "description": "An organisation at 0% is not a low performer \u2014 it is one whose capability is simply unknown."
+                "description": "Compare against the chart above: investment should follow the gaps."
               }
             }
           },
           "position": {
             "x": 0,
             "y": 23,
-            "width": 3,
-            "height": 8
-          }
-        },
-        {
-          "widget": {
-            "name": "chart_dq",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "ds_data_quality",
-                  "fields": [
-                    {
-                      "name": "source_system",
-                      "expression": "`source_system`"
-                    },
-                    {
-                      "name": "issue_count",
-                      "expression": "SUM(`issue_count`)"
-                    },
-                    {
-                      "name": "severity",
-                      "expression": "`severity`"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 3,
-              "widgetType": "bar",
-              "encodings": {
-                "x": {
-                  "fieldName": "issue_count",
-                  "scale": {
-                    "type": "quantitative"
-                  },
-                  "displayName": "Issues logged"
-                },
-                "y": {
-                  "fieldName": "source_system",
-                  "scale": {
-                    "type": "categorical"
-                  },
-                  "displayName": "Source system"
-                },
-                "color": {
-                  "fieldName": "severity",
-                  "scale": {
-                    "type": "categorical"
-                  },
-                  "displayName": "Severity"
-                }
-              },
-              "frame": {
-                "showTitle": true,
-                "title": "Where the data needs fixing at source",
-                "showDescription": true,
-                "description": "Counts of repairs, exclusions and conflicts logged while reconciling each source. Split by severity."
-              }
-            }
-          },
-          "position": {
-            "x": 3,
-            "y": 23,
-            "width": 3,
+            "width": 6,
             "height": 8
           }
         },
@@ -597,11 +418,15 @@
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "ds_cert_risk",
+                  "datasetName": "ds_certifications",
                   "fields": [
                     {
-                      "name": "worker_name",
-                      "expression": "`worker_name`"
+                      "name": "name",
+                      "expression": "`name`"
+                    },
+                    {
+                      "name": "team",
+                      "expression": "`team`"
                     },
                     {
                       "name": "certification",
@@ -620,12 +445,8 @@
                       "expression": "`days_to_expiry`"
                     },
                     {
-                      "name": "voucher_cost",
-                      "expression": "`voucher_cost`"
-                    },
-                    {
-                      "name": "on_approved_cert_list",
-                      "expression": "`on_approved_cert_list`"
+                      "name": "cost_usd",
+                      "expression": "`cost_usd`"
                     }
                   ],
                   "disaggregated": true
@@ -638,78 +459,50 @@
               "encodings": {
                 "columns": [
                   {
-                    "fieldName": "worker_name",
+                    "fieldName": "name",
                     "displayName": "Worker",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
                     "type": "string",
                     "visible": true,
                     "order": 0
                   },
                   {
-                    "fieldName": "certification",
-                    "displayName": "Certification",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
+                    "fieldName": "team",
+                    "displayName": "Team",
                     "type": "string",
                     "visible": true,
                     "order": 1
                   },
                   {
-                    "fieldName": "risk_band",
-                    "displayName": "Risk",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
+                    "fieldName": "certification",
+                    "displayName": "Certification",
                     "type": "string",
                     "visible": true,
                     "order": 2
                   },
                   {
-                    "fieldName": "expires_on",
-                    "displayName": "Expires",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
+                    "fieldName": "risk_band",
+                    "displayName": "Status",
                     "type": "string",
                     "visible": true,
                     "order": 3
                   },
                   {
-                    "fieldName": "days_to_expiry",
-                    "displayName": "Days to expiry",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
+                    "fieldName": "expires_on",
+                    "displayName": "Expires",
                     "type": "string",
                     "visible": true,
                     "order": 4
                   },
                   {
-                    "fieldName": "voucher_cost",
-                    "displayName": "Voucher $",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
+                    "fieldName": "days_to_expiry",
+                    "displayName": "Days",
                     "type": "string",
                     "visible": true,
                     "order": 5
                   },
                   {
-                    "fieldName": "on_approved_cert_list",
-                    "displayName": "On approved list",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
+                    "fieldName": "cost_usd",
+                    "displayName": "Cost $",
                     "type": "string",
                     "visible": true,
                     "order": 6
@@ -720,139 +513,13 @@
                 "showTitle": true,
                 "title": "Certification pipeline",
                 "showDescription": true,
-                "description": "Every tracked certification for the filtered population, soonest to lapse first."
+                "description": "Soonest to lapse first."
               }
             }
           },
           "position": {
             "x": 0,
             "y": 31,
-            "width": 6,
-            "height": 8
-          }
-        },
-        {
-          "widget": {
-            "name": "table_exposure",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "ds_critical_skills",
-                  "fields": [
-                    {
-                      "name": "canonical_skill",
-                      "expression": "`canonical_skill`"
-                    },
-                    {
-                      "name": "risk_band",
-                      "expression": "`risk_band`"
-                    },
-                    {
-                      "name": "deep_practitioner_names",
-                      "expression": "`deep_practitioner_names`"
-                    },
-                    {
-                      "name": "people_with_skill",
-                      "expression": "`people_with_skill`"
-                    },
-                    {
-                      "name": "deep_practitioners",
-                      "expression": "`deep_practitioners`"
-                    },
-                    {
-                      "name": "criticality_rationale",
-                      "expression": "`criticality_rationale`"
-                    }
-                  ],
-                  "disaggregated": true
-                }
-              }
-            ],
-            "spec": {
-              "version": 1,
-              "widgetType": "table",
-              "encodings": {
-                "columns": [
-                  {
-                    "fieldName": "canonical_skill",
-                    "displayName": "Skill",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
-                    "type": "string",
-                    "visible": true,
-                    "order": 0
-                  },
-                  {
-                    "fieldName": "risk_band",
-                    "displayName": "Exposure",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
-                    "type": "string",
-                    "visible": true,
-                    "order": 1
-                  },
-                  {
-                    "fieldName": "deep_practitioner_names",
-                    "displayName": "Who holds it",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
-                    "type": "string",
-                    "visible": true,
-                    "order": 2
-                  },
-                  {
-                    "fieldName": "people_with_skill",
-                    "displayName": "Claim it",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
-                    "type": "string",
-                    "visible": true,
-                    "order": 3
-                  },
-                  {
-                    "fieldName": "deep_practitioners",
-                    "displayName": "Hold it",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
-                    "type": "string",
-                    "visible": true,
-                    "order": 4
-                  },
-                  {
-                    "fieldName": "criticality_rationale",
-                    "displayName": "Why it is critical",
-                    "booleanValues": [
-                      "false",
-                      "true"
-                    ],
-                    "type": "string",
-                    "visible": true,
-                    "order": 5
-                  }
-                ]
-              },
-              "frame": {
-                "showTitle": true,
-                "title": "Critical skill exposure",
-                "showDescription": true,
-                "description": "The gap between how many people claim a skill and how many hold it at depth."
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 39,
             "width": 6,
             "height": 8
           }
