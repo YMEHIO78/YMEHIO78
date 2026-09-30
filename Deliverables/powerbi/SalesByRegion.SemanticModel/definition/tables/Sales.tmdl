@@ -55,14 +55,20 @@ table Sales
 		displayFolder: Growth
 		lineageTag: 9f02f5ba-7761-5830-84af-0843e82dedfe
 
-	/// Monthly country targets, summed to the current filter.
-	measure 'Sales Target' = SUM ( Targets[Target] )
+	/// Monthly country targets, summed to the current filter. Targets are not set per
+	/// channel or product, so the measure is blank when either is filtered rather than
+	/// comparing part of the sales with the whole target.
+	measure 'Sales Target' =
+			IF (
+			    NOT ISFILTERED ( Sales[Channel] ) && NOT ISFILTERED ( Products ),
+			    SUM ( Targets[Target] )
+			)
 		formatString: \$#,0;(\$#,0);\$#,0
 		displayFolder: Target
 		lineageTag: d1e654a0-a4b9-5887-918c-0c400e646734
 
 	/// Sales above (+) or below (-) target.
-	measure 'Variance to Target' = [Total Sales] - [Sales Target]
+	measure 'Variance to Target' = IF ( NOT ISBLANK ( [Sales Target] ), [Total Sales] - [Sales Target] )
 		formatString: +\$#,0;-\$#,0;\$#,0
 		displayFolder: Target
 		lineageTag: 65fdfa55-3ccd-5804-bea7-c8dbb067cfea

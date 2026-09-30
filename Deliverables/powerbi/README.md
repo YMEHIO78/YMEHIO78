@@ -57,7 +57,8 @@ probably read the wrong folder.
 
 - **Sales**: one row per order line; holds all the measures.
 - **Targets**: a monthly target per country, so the target rolls up to region and
-  year the same way sales do.
+  year the same way sales do. There is no target per channel or product, so the
+  target measures go blank when a channel or product is filtered.
 - **Calendar**: a DAX table running from 1 Jan of the first order year **to the last
   order date**. Because it stops there, `Sales PY` for a part-year (2026) is compared
   with the same months of 2025, not the whole year.
