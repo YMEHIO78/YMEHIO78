@@ -1,0 +1,20 @@
+country_id,country,region
+101,United States,North America
+102,Canada,North America
+103,Mexico,North America
+201,Brazil,Latin America
+202,Argentina,Latin America
+203,Chile,Latin America
+204,Colombia,Latin America
+301,Germany,Europe
+302,United Kingdom,Europe
+303,France,Europe
+304,Spain,Europe
+305,Netherlands,Europe
+401,United Arab Emirates,Middle East & Africa
+402,Saudi Arabia,Middle East & Africa
+403,South Africa,Middle East & Africa
+501,Japan,Asia Pacific
+502,Australia,Asia Pacific
+503,India,Asia Pacific
+504,Singapore,Asia Pacific

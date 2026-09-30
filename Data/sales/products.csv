@@ -1,0 +1,13 @@
+product_id,product,category,list_price,unit_cost
+1,Aero 14,Laptops,1299,910
+2,Aero 16 Pro,Laptops,1899,1290
+3,Flex 13,Laptops,849,640
+4,View 27 QHD,Monitors,379,250
+5,View 32 4K,Monitors,649,420
+6,View 24,Monitors,199,138
+7,Dock Pro,Accessories,229,120
+8,Wireless Keyboard,Accessories,89,41
+9,Precision Mouse,Accessories,59,24
+10,Extended Warranty,Services,149,35
+11,Onsite Setup,Services,199,90
+12,Care Plus,Services,299,95

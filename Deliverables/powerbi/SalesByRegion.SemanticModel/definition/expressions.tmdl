@@ -1,0 +1,6 @@
+/// Folder holding the sales CSVs, with a trailing backslash. Change it under
+/// Transform data > Edit parameters to wherever Data\sales\ lives on your machine.
+expression DataFolder = "C:\SalesByRegion\Data\sales\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 00846c36-805a-5c89-9f03-a816bb57535d
+
+	annotation PBI_ResultType = Text

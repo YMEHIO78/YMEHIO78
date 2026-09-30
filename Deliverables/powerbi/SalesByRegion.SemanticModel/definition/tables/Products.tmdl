@@ -1,0 +1,57 @@
+table Products
+	lineageTag: a5892a29-a8b5-5a7a-add7-5b2e391cf392
+
+	column 'Product ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		isKey
+		lineageTag: 6829c1d0-4ded-5722-832d-afe660138ec2
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 6d92d5ce-f711-5df0-8eb6-cfabd3057a5f
+		summarizeBy: none
+		sourceColumn: product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 63af419d-db63-5fb9-8dc5-354b5bd1a407
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'List Price'
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 6c2defdb-a1a5-5933-a036-ec0358b5e118
+		summarizeBy: none
+		sourceColumn: list_price
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Cost'
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: f5a8dde2-5ef2-5f6f-83d7-a3b672213ccc
+		summarizeBy: none
+		sourceColumn: unit_cost
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DataFolder & "products.csv"), [Delimiter = ",", Columns = 5, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Typed = Table.TransformColumnTypes(Promoted, {{"product_id", Int64.Type}, {"product", type text}, {"category", type text}, {"list_price", Currency.Type}, {"unit_cost", Currency.Type}}, "en-US")
+				in
+					Typed

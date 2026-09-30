@@ -1,0 +1,51 @@
+table Geography
+	lineageTag: 5e9c823d-93d2-5831-8921-abd14d039ab2
+
+	column 'Country ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		isKey
+		lineageTag: f53689d8-cd57-5740-944f-72b76ee756a1
+		summarizeBy: none
+		sourceColumn: country_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		dataCategory: Country
+		lineageTag: 35d9d650-5096-5daf-9f2d-a001aab44435
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 04cddfe5-45ba-51b4-a730-cc38dbf5f13d
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Region Hierarchy'
+		lineageTag: eb955858-fcaa-58f8-854b-d0d402b52da3
+
+		level Region
+			lineageTag: 535af186-b013-5968-acfa-d8c5bf1d29b7
+			column: Region
+
+		level Country
+			lineageTag: 24ae3446-8dbb-55a7-a0f1-e93b9153ebda
+			column: Country
+
+	partition Geography = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DataFolder & "geography.csv"), [Delimiter = ",", Columns = 3, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Typed = Table.TransformColumnTypes(Promoted, {{"country_id", Int64.Type}, {"country", type text}, {"region", type text}}, "en-US")
+				in
+					Typed

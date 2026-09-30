@@ -9,8 +9,10 @@ analyses them, and a report that says what to do about it.
 
 ```
 Data/          employees · skills · certifications · learning
+               sales/ — geography · products · sales · targets (for the Power BI dashboard)
 Code/          skills_analysis.ipynb — the whole analysis
-Deliverables/  FINDINGS.md, its charts, and the Databricks dashboard
+               generate_sales_data.py — builds Data/sales/
+Deliverables/  FINDINGS.md, its charts, the Databricks dashboard, and powerbi/
 ```
 
 ### `Data/` — four tidy CSVs
@@ -38,6 +40,7 @@ report. It runs top to bottom with no arguments.
 | [`FINDINGS.md`](Deliverables/FINDINGS.md) | The report — three findings, three courses of action, three charts |
 | `charts/` | The charts, in light and dark variants so they read correctly either way |
 | `skills_intelligence.lvdash.json` | Databricks AI/BI dashboard — four tracked metrics |
+| [`powerbi/`](Deliverables/powerbi/README.md) | **Sales by Region** Power BI dashboard (`.pbip` project) over `Data/sales/` |
 
 `FINDINGS.md` and the charts are **generated**. Re-running the notebook overwrites
 them, so the prose cannot drift from the numbers.
@@ -95,3 +98,12 @@ from the CSVs, so the notebook runs anywhere.
 - **30 people** — percentages move about three points per person. Read the counts.
 - **The as-of date is pinned** to 2026-09-22, so figures are reproducible rather
   than drifting with the calendar.
+
+## Sales by Region (Power BI)
+
+A separate, self-contained dashboard. `Deliverables/powerbi/SalesByRegion.pbip`
+opens in Power BI Desktop and shows net sales, growth, target attainment and
+channel mix across five regions and 19 countries, from the synthetic CSVs in
+`Data/sales/`. Set the `DataFolder` parameter to your copy of `Data\sales\`
+and refresh. Details, measures and expected figures are in
+[its README](Deliverables/powerbi/README.md).

@@ -1,0 +1,19 @@
+relationship 21453b75-db02-5679-841d-0345f5ddf62f
+	fromColumn: Sales.'Country ID'
+	toColumn: Geography.'Country ID'
+
+relationship 8e436732-6ab8-50d0-a0c6-4037977b4d0d
+	fromColumn: Sales.'Product ID'
+	toColumn: Products.'Product ID'
+
+relationship 967e843f-9009-56b1-80d5-ac2ba55ed8bf
+	fromColumn: Sales.'Order Date'
+	toColumn: Calendar.Date
+
+relationship b1fa9a07-25d2-539d-8598-58b37150afe7
+	fromColumn: Targets.'Country ID'
+	toColumn: Geography.'Country ID'
+
+relationship 0868ef9b-6479-5a0d-a6fd-b3c8214d8c2e
+	fromColumn: Targets.Month
+	toColumn: Calendar.Date

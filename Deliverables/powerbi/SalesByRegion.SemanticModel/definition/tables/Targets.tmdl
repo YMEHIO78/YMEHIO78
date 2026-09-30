@@ -1,0 +1,44 @@
+table Targets
+	lineageTag: 12ef45bc-7e9f-5bea-9690-695a0f6ea014
+
+	column 'Country ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: f53689d8-cd57-5740-944f-72b76ee756a1
+		summarizeBy: none
+		sourceColumn: country_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: dateTime
+		formatString: yyyy-mm
+		isHidden
+		lineageTag: a4d95007-e53a-5733-b569-d4b7d5594952
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Target
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		lineageTag: c69b2e97-4196-5b05-bc9f-a55544688c3a
+		summarizeBy: sum
+		sourceColumn: target
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Targets = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DataFolder & "targets.csv"), [Delimiter = ",", Columns = 3, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Typed = Table.TransformColumnTypes(Promoted, {{"country_id", Int64.Type}, {"month", type date}, {"target", Currency.Type}}, "en-US")
+				in
+					Typed
