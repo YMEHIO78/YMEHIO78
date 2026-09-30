@@ -50,7 +50,8 @@ table Products
 		mode: import
 		source =
 				let
-					Source = Csv.Document(File.Contents(DataFolder & "products.csv"), [Delimiter = ",", Columns = 5, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "products.csv"), [Delimiter = ",", Columns = 5, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 					Typed = Table.TransformColumnTypes(Promoted, {{"product_id", Int64.Type}, {"product", type text}, {"category", type text}, {"list_price", Currency.Type}, {"unit_cost", Currency.Type}}, "en-US")
 				in

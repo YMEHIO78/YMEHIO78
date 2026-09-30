@@ -12,8 +12,8 @@ the report), so changes show up as readable diffs in git.
    *Store reports using enhanced metadata format (PBIR)*, then restart.
 2. Open `SalesByRegion.pbip`.
 3. Point the model at the data: *Transform data → Edit parameters → DataFolder*,
-   set it to the full path of this repo's `Data\sales\` folder **with a trailing
-   backslash**, e.g. `C:\src\YMEHIO78\Data\sales\`.
+   set it to the full path of this repo's `Data\sales\` folder,
+   e.g. `C:\src\YMEHIO78\Data\sales`. A trailing backslash is optional.
 4. **Refresh**. The project holds no data, so every visual is blank until you refresh.
 
 ## What's on the page

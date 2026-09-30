@@ -161,7 +161,8 @@ table Sales
 		mode: import
 		source =
 				let
-					Source = Csv.Document(File.Contents(DataFolder & "sales.csv"), [Delimiter = ",", Columns = 8, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "sales.csv"), [Delimiter = ",", Columns = 8, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 					Typed = Table.TransformColumnTypes(Promoted, {{"order_id", Int64.Type}, {"order_date", type date}, {"country_id", Int64.Type}, {"product_id", Int64.Type}, {"channel", type text}, {"units", Int64.Type}, {"revenue", Currency.Type}, {"cost", Currency.Type}}, "en-US")
 				in

@@ -44,7 +44,8 @@ table Geography
 		mode: import
 		source =
 				let
-					Source = Csv.Document(File.Contents(DataFolder & "geography.csv"), [Delimiter = ",", Columns = 3, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "geography.csv"), [Delimiter = ",", Columns = 3, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 					Typed = Table.TransformColumnTypes(Promoted, {{"country_id", Int64.Type}, {"country", type text}, {"region", type text}}, "en-US")
 				in
