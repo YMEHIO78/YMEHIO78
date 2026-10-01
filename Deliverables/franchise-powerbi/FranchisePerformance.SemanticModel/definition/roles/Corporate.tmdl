@@ -1,0 +1,4 @@
+/// Head office. Sees every location. Workspace admins, members and contributors
+/// see everything anyway; this role is for viewers who need the full network.
+role Corporate
+	modelPermission: read

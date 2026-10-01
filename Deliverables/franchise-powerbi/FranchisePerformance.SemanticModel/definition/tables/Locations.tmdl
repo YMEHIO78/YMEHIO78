@@ -1,0 +1,87 @@
+table Locations
+	lineageTag: 10f1d0fc-217e-5581-be94-6639c3ad1e44
+
+	column 'Location ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		isKey
+		lineageTag: 6fec1b84-d9bc-53d3-a6f7-e321b4bdd805
+		summarizeBy: none
+		sourceColumn: location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location
+		dataType: string
+		lineageTag: b7102703-c40b-5df0-a350-973028500ddd
+		summarizeBy: none
+		sourceColumn: location
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		dataCategory: City
+		lineageTag: fd797173-0df8-5827-a740-5b43a60656bb
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		dataCategory: StateOrProvince
+		lineageTag: 6a00327f-f19a-56ce-983b-c7c8ed32378f
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 2d32fd2b-7108-559b-b82c-da0f89204424
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ownership
+		dataType: string
+		lineageTag: 96bbbfae-84d1-56a8-a40c-b33ae98a0892
+		summarizeBy: none
+		sourceColumn: ownership
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Franchisee ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 225d964e-600b-509d-a860-851a0af34e26
+		summarizeBy: none
+		sourceColumn: franchisee_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Open Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 46a56d99-419b-53e5-b138-ba3ffdeaefe0
+		summarizeBy: none
+		sourceColumn: open_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Locations = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "locations.csv"), [Delimiter = ",", Columns = 8, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Typed = Table.TransformColumnTypes(Promoted, {{"location_id", Int64.Type}, {"location", type text}, {"city", type text}, {"state", type text}, {"region", type text}, {"ownership", type text}, {"franchisee_id", Int64.Type}, {"open_date", type date}}, "en-US")
+				in
+					Typed

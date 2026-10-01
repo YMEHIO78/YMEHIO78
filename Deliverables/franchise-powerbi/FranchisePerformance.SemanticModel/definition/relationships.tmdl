@@ -1,0 +1,11 @@
+relationship e4f57825-74bd-527b-8f55-23d8889e418a
+	fromColumn: Sales.'Location ID'
+	toColumn: Locations.'Location ID'
+
+relationship d80ea826-e3c1-55b0-ba8e-a2d4e3584abc
+	fromColumn: Sales.Date
+	toColumn: Calendar.Date
+
+relationship 97fef1ec-f762-548c-9860-e1e46353704a
+	fromColumn: Locations.'Franchisee ID'
+	toColumn: Franchisees.'Franchisee ID'

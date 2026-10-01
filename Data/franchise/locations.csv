@@ -1,0 +1,31 @@
+location_id,location,city,state,region,ownership,franchisee_id,open_date
+1,"Boston, MA",Boston,MA,Northeast,Corporate,0,2016-03-01
+2,"Cambridge, MA",Cambridge,MA,Northeast,Corporate,0,2018-06-15
+3,"Portland, ME",Portland,ME,Northeast,Franchise,9,2019-04-01
+4,"Manchester, NH",Manchester,NH,Northeast,Franchise,9,2020-09-01
+5,"Providence, RI",Providence,RI,Northeast,Franchise,1,2017-11-01
+6,"Hartford, CT",Hartford,CT,Northeast,Franchise,1,2021-02-01
+7,"New Haven, CT",New Haven,CT,Northeast,Franchise,1,2022-05-01
+8,"Atlanta, GA",Atlanta,GA,Southeast,Corporate,0,2017-01-15
+9,"Charleston, SC",Charleston,SC,Southeast,Franchise,6,2019-08-01
+10,"Savannah, GA",Savannah,GA,Southeast,Franchise,6,2023-03-01
+11,"Charlotte, NC",Charlotte,NC,Southeast,Franchise,2,2018-10-01
+12,"Raleigh, NC",Raleigh,NC,Southeast,Franchise,3,2020-01-15
+13,"Nashville, TN",Nashville,TN,Southeast,Franchise,2,2021-07-01
+14,"Tampa, FL",Tampa,FL,Southeast,Franchise,3,2024-06-01
+15,"Chicago, IL",Chicago,IL,Midwest,Corporate,0,2015-05-01
+16,"Evanston, IL",Evanston,IL,Midwest,Franchise,4,2019-02-01
+17,"Milwaukee, WI",Milwaukee,WI,Midwest,Franchise,4,2020-04-01
+18,"Madison, WI",Madison,WI,Midwest,Franchise,4,2022-09-01
+19,"Omaha, NE",Omaha,NE,Midwest,Franchise,7,2018-03-01
+20,"Kansas City, MO",Kansas City,MO,Midwest,Franchise,7,2021-10-01
+21,"Minneapolis, MN",Minneapolis,MN,Midwest,Corporate,0,2019-12-01
+22,"Seattle, WA",Seattle,WA,West,Corporate,0,2016-09-01
+23,"Tacoma, WA",Tacoma,WA,West,Franchise,8,2020-06-01
+24,"Portland, OR",Portland,OR,West,Franchise,8,2018-08-01
+25,"Boise, ID",Boise,ID,West,Franchise,5,2021-04-01
+26,"Denver, CO",Denver,CO,West,Franchise,5,2017-07-01
+27,"Boulder, CO",Boulder,CO,West,Franchise,5,2023-01-15
+28,"Phoenix, AZ",Phoenix,AZ,West,Franchise,10,2019-05-01
+29,"Tucson, AZ",Tucson,AZ,West,Franchise,10,2022-02-01
+30,"San Diego, CA",San Diego,CA,West,Corporate,0,2018-01-15

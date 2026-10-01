@@ -9,10 +9,12 @@ analyses them, and a report that says what to do about it.
 
 ```
 Data/          employees · skills · certifications · learning
-               sales/ — geography · products · sales · targets (for the Power BI dashboard)
+               sales/ — geography · products · sales · targets (Sales by Region dashboard)
+               franchise/ — franchisees · locations · daily_sales (Franchise Performance dashboard)
 Code/          skills_analysis.ipynb — the whole analysis
                generate_sales_data.py — builds Data/sales/
-Deliverables/  FINDINGS.md, its charts, the Databricks dashboard, and powerbi/
+               generate_franchise_data.py — builds Data/franchise/
+Deliverables/  FINDINGS.md, its charts, the Databricks dashboard, powerbi/ and franchise-powerbi/
 ```
 
 ### `Data/` — four tidy CSVs
@@ -41,6 +43,7 @@ report. It runs top to bottom with no arguments.
 | `charts/` | The charts, in light and dark variants so they read correctly either way |
 | `skills_intelligence.lvdash.json` | Databricks AI/BI dashboard — four tracked metrics |
 | [`powerbi/`](Deliverables/powerbi/README.md) | **Sales by Region** Power BI dashboard (`.pbip` project) over `Data/sales/` |
+| [`franchise-powerbi/`](Deliverables/franchise-powerbi/README.md) | **Franchise Performance** Power BI dashboard: corporate view plus a franchisee view locked down by row-level security |
 
 `FINDINGS.md` and the charts are **generated**. Re-running the notebook overwrites
 them, so the prose cannot drift from the numbers.
@@ -107,3 +110,12 @@ channel mix across five regions and 19 countries, from the synthetic CSVs in
 `Data/sales/`. Set the `DataFolder` parameter to your copy of `Data\sales\`
 and refresh. Details, measures and expected figures are in
 [its README](Deliverables/powerbi/README.md).
+
+## Franchise Performance (Power BI)
+
+`Deliverables/franchise-powerbi/FranchisePerformance.pbip` has a corporate page
+and a franchisee page. The corporate page filters by date range, region,
+ownership, location and metric. On the franchisee page, a **Franchisee**
+security role limits each owner to the cafés they own. The data is synthetic,
+in `Data/franchise/`. Setup, security testing and expected figures are in
+[its README](Deliverables/franchise-powerbi/README.md).

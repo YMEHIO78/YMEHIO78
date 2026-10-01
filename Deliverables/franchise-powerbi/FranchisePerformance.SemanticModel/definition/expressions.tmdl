@@ -1,0 +1,6 @@
+/// Folder holding the franchise CSVs (trailing backslash optional). Change it under
+/// Transform data > Edit parameters to wherever Data\franchise\ lives on your machine.
+expression DataFolder = "C:\FranchisePerformance\Data\franchise\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 0de77f84-015f-57ab-aab1-8f5a589b1b40
+
+	annotation PBI_ResultType = Text

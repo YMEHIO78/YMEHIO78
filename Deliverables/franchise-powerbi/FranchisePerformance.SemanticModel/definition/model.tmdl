@@ -1,0 +1,21 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DataFolder","Sales","Locations","Franchisees"]
+
+ref table Sales
+ref table Locations
+ref table Franchisees
+ref table Calendar
+ref table Metric
+
+ref role Corporate
+ref role Franchisee

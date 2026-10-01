@@ -1,0 +1,42 @@
+/// One row per owner. Row-level security filters this table to the signed-in franchisee.
+table Franchisees
+	lineageTag: 3c525452-644f-5af2-a309-00826bb02518
+
+	column 'Franchisee ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		isKey
+		lineageTag: 225d964e-600b-509d-a860-851a0af34e26
+		summarizeBy: none
+		sourceColumn: franchisee_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Franchisee
+		dataType: string
+		lineageTag: 20ff7497-aa13-5f9d-ad46-c8eb34b42dc9
+		summarizeBy: none
+		sourceColumn: franchisee
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Owner Email'
+		dataType: string
+		isHidden
+		lineageTag: 8375cf6a-3f73-5468-ac69-76f9e2f6f042
+		summarizeBy: none
+		sourceColumn: owner_email
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Franchisees = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "franchisees.csv"), [Delimiter = ",", Columns = 3, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Typed = Table.TransformColumnTypes(Promoted, {{"franchisee_id", Int64.Type}, {"franchisee", type text}, {"owner_email", type text}}, "en-US")
+				in
+					Typed

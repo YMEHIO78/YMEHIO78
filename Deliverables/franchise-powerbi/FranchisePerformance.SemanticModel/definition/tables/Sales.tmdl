@@ -1,0 +1,288 @@
+table Sales
+	lineageTag: bd06d2df-e176-54c2-bb2c-9731e3b7dbd2
+
+	/// Net sales after discounts.
+	measure 'Net Sales' = SUM ( Sales[Net Sales Amount] )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Sales
+		lineageTag: 576131c0-a2e3-52de-a811-8c9817bb3266
+
+	/// Guest checks.
+	measure Transactions = SUM ( Sales[Transaction Count] )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: eef5452c-0fbc-5574-914a-2d88fe34db93
+
+	/// Net sales per transaction.
+	measure 'Avg Ticket' = DIVIDE ( [Net Sales], [Transactions] )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: Sales
+		lineageTag: 132153e2-a11c-5e31-9c2b-650ed35d009c
+
+	/// Net sales per location per trading day. Use this to compare owners with different numbers of cafés.
+	measure 'Avg Daily Sales' = DIVIDE ( [Net Sales], COUNTROWS ( Sales ) )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Sales
+		lineageTag: 56b9b633-b705-5a6c-a30b-1bb01f7a7618
+
+	/// Locations that traded in the period.
+	measure 'Active Locations' = DISTINCTCOUNT ( Sales[Location ID] )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: d5b6af96-54ac-5dce-8223-ac95866aa9e9
+
+	/// Labor cost as a share of net sales.
+	measure 'Labor %' = DIVIDE ( SUM ( Sales[Labor Cost] ), [Net Sales] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Costs
+		lineageTag: 620cced7-57ec-560d-b251-6aee14b2648b
+
+	/// Food and paper cost as a share of net sales.
+	measure 'Food Cost %' = DIVIDE ( SUM ( Sales[Food Cost] ), [Net Sales] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Costs
+		lineageTag: 81fb2556-7dc5-50e3-a450-9f4d80c58652
+
+	/// Labor plus food cost as a share of net sales. The industry rule of thumb is to stay under 60%.
+	measure 'Prime Cost %' = DIVIDE ( SUM ( Sales[Labor Cost] ) + SUM ( Sales[Food Cost] ), [Net Sales] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Costs
+		lineageTag: 46c8fe2f-fd97-5425-9c2a-651c85ba5962
+
+	/// Average post-visit survey score, 1 to 5, weighted by number of responses.
+	measure 'Guest Satisfaction' = DIVIDE ( SUM ( Sales[Survey Score Total] ), SUM ( Sales[Survey Responses] ) )
+		formatString: 0.00
+		displayFolder: Guests
+		lineageTag: 84bc21e1-6174-5f17-830e-f8c151ebf8d7
+
+	/// Net sales for the same dates one year earlier. Blank when the range starts in the first year of data, which has no full prior year.
+	measure 'Net Sales PY' =
+			VAR FirstTradingDay = CALCULATE ( MIN ( 'Calendar'[Date] ), ALL ( 'Calendar' ) )
+			RETURN
+				IF (
+					MIN ( 'Calendar'[Date] ) >= EDATE ( FirstTradingDay, 12 ),
+					CALCULATE ( [Net Sales], SAMEPERIODLASTYEAR ( 'Calendar'[Date] ) )
+				)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Growth
+		lineageTag: 9f2d6c8d-dca6-5cb0-a2ac-a7c599407a2d
+
+	/// Growth on the same dates last year.
+	measure 'Net Sales YoY %' = DIVIDE ( [Net Sales] - [Net Sales PY], [Net Sales PY] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Growth
+		lineageTag: bcd0e084-fe7d-5cd0-bac4-3fe8d6726303
+
+	/// The measure chosen in the Metric slicer. Net Sales when nothing is chosen.
+	measure 'Selected Metric' =
+			VAR k = SELECTEDVALUE ( Metric[Metric Key], 1 )
+			RETURN
+				SWITCH (
+					k,
+					1, [Net Sales],
+					2, [Transactions],
+					3, [Avg Ticket],
+					4, [Avg Daily Sales],
+					5, [Labor %],
+					6, [Food Cost %],
+					7, [Prime Cost %],
+					8, [Guest Satisfaction]
+				)
+		displayFolder: Metric picker
+		lineageTag: 8ef19b92-b890-5128-8095-35d18b4afe8c
+
+		formatStringDefinition =
+				VAR k = SELECTEDVALUE ( Metric[Metric Key], 1 )
+				RETURN
+					SWITCH (
+						k,
+						1, "$#,0",
+						2, "#,0",
+						3, "$#,0.00",
+						4, "$#,0",
+						8, "0.00",
+						"0.0%"
+					)
+
+	/// The chosen measure for the same dates one year earlier. Blank when there is no full prior year.
+	measure 'Selected Metric PY' =
+			VAR FirstTradingDay = CALCULATE ( MIN ( 'Calendar'[Date] ), ALL ( 'Calendar' ) )
+			RETURN
+				IF (
+					MIN ( 'Calendar'[Date] ) >= EDATE ( FirstTradingDay, 12 ),
+					CALCULATE ( [Selected Metric], SAMEPERIODLASTYEAR ( 'Calendar'[Date] ) )
+				)
+		displayFolder: Metric picker
+		lineageTag: a084b35d-3ef4-5881-b04f-06e00e03fbda
+
+		formatStringDefinition =
+				VAR k = SELECTEDVALUE ( Metric[Metric Key], 1 )
+				RETURN
+					SWITCH (
+						k,
+						1, "$#,0",
+						2, "#,0",
+						3, "$#,0.00",
+						4, "$#,0",
+						8, "0.00",
+						"0.0%"
+					)
+
+	/// Change on last year: % for money and counts, percentage points for cost ratios, score points for satisfaction.
+	measure 'Change vs PY' =
+			VAR k = SELECTEDVALUE ( Metric[Metric Key], 1 )
+			VAR cur = [Selected Metric]
+			VAR py = [Selected Metric PY]
+			RETURN
+				IF (
+					NOT ISBLANK ( cur ) && NOT ISBLANK ( py ),
+					SWITCH (
+						TRUE (),
+						k IN { 5, 6, 7 }, ( cur - py ) * 100,
+						k = 8, cur - py,
+						DIVIDE ( cur - py, py )
+					)
+				)
+		displayFolder: Metric picker
+		lineageTag: b14e7276-36d8-578b-81cb-b14822b123b3
+
+		formatStringDefinition =
+				VAR k = SELECTEDVALUE ( Metric[Metric Key], 1 )
+				RETURN
+					SWITCH (
+						TRUE (),
+						k IN { 5, 6, 7 }, "+0.0"" pts"";-0.0"" pts"";0.0"" pts""",
+						k = 8, "+0.00;-0.00;0.00",
+						"+0.0%;-0.0%;0.0%"
+					)
+
+	/// Name of the chosen metric, for titles.
+	measure 'Metric Name' = SELECTEDVALUE ( Metric[Metric], "Net Sales" )
+		displayFolder: Titles
+		lineageTag: 13ba576d-c3c4-59a7-b987-4e428f6effcf
+
+	/// Dynamic chart title.
+	measure 'Title Trend' = [Metric Name] & " by month"
+		displayFolder: Titles
+		lineageTag: cc5e89ce-5d5f-5c9a-abc5-05fdfdac4bf8
+
+	/// Dynamic chart title.
+	measure 'Title Region' = [Metric Name] & " by region"
+		displayFolder: Titles
+		lineageTag: 85183526-6c2b-58e3-a83a-7bcb3a94d76e
+
+	/// Dynamic chart title.
+	measure 'Title Franchisee' = [Metric Name] & " by owner"
+		displayFolder: Titles
+		lineageTag: 67984e8a-1dec-5ca4-9356-fc47cb0247b2
+
+	/// Dynamic chart title.
+	measure 'Title Location' = [Metric Name] & " by location"
+		displayFolder: Titles
+		lineageTag: 403a6e45-91ce-5fd8-a87d-62035d2557bb
+
+	/// Whose data this page shows. A franchisee signed in under the Franchisee role only ever sees their own name here.
+	measure 'Viewing As' =
+			VAR owners = COUNTROWS ( VALUES ( Franchisees[Franchisee] ) )
+			RETURN
+				IF (
+					owners = 1,
+					VALUES ( Franchisees[Franchisee] ),
+					"All " & owners & " owners. Pick one to preview their view"
+				)
+		displayFolder: Titles
+		lineageTag: 100a839a-dfa2-5346-abca-8c28bca19c91
+
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		isHidden
+		lineageTag: f4bbfeea-0e52-5b55-9913-75923152504f
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Location ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 6fec1b84-d9bc-53d3-a6f7-e321b4bdd805
+		summarizeBy: none
+		sourceColumn: location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net Sales Amount'
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		lineageTag: 99eedf53-4fb5-5246-b661-90283bd2f06e
+		summarizeBy: sum
+		sourceColumn: net_sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transaction Count'
+		dataType: int64
+		formatString: #,0
+		isHidden
+		lineageTag: 08d22953-3050-516d-9d9c-72a110af230f
+		summarizeBy: sum
+		sourceColumn: transactions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Labor Cost'
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		lineageTag: 6145c632-950d-5a87-a066-5076b068e200
+		summarizeBy: sum
+		sourceColumn: labor_cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Food Cost'
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$#,0
+		isHidden
+		lineageTag: c080278d-6417-5a5d-a96b-291138006c7e
+		summarizeBy: sum
+		sourceColumn: food_cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Survey Responses'
+		dataType: int64
+		formatString: #,0
+		isHidden
+		lineageTag: 8eed87a5-9c79-5acd-aa9e-ebbf274fa4ff
+		summarizeBy: sum
+		sourceColumn: survey_responses
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Survey Score Total'
+		dataType: int64
+		formatString: #,0
+		isHidden
+		lineageTag: 25c8b936-40c8-5bf7-a37a-fa2e529ad81b
+		summarizeBy: sum
+		sourceColumn: survey_score_total
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "daily_sales.csv"), [Delimiter = ",", Columns = 8, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Typed = Table.TransformColumnTypes(Promoted, {{"date", type date}, {"location_id", Int64.Type}, {"net_sales", Currency.Type}, {"transactions", Int64.Type}, {"labor_cost", Currency.Type}, {"food_cost", Currency.Type}, {"survey_responses", Int64.Type}, {"survey_score_total", Int64.Type}}, "en-US")
+				in
+					Typed

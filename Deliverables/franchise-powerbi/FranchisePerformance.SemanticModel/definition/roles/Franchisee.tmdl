@@ -1,0 +1,6 @@
+/// A franchisee sees only the locations they own. The sign-in email is matched against
+/// Franchisees[Owner Email]; the filter flows on to Locations and Sales.
+role Franchisee
+	modelPermission: read
+
+	tablePermission Franchisees = LOWER ( Franchisees[Owner Email] ) = LOWER ( USERPRINCIPALNAME () )

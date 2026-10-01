@@ -1,0 +1,42 @@
+/// Disconnected list of metrics for the Metric slicer. Drives [Selected Metric].
+table Metric
+	lineageTag: 64c31d0b-172c-51c3-8b03-33e26663be38
+
+	column 'Metric Key'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 861065e3-c568-5470-9cbd-0a655f14a005
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Metric Key]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Metric
+		dataType: string
+		sortByColumn: 'Metric Key'
+		lineageTag: 3b6ebf22-45ba-5e8f-9607-42c0042308f3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Metric]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Metric = calculated
+		mode: import
+		source =
+				DATATABLE (
+					"Metric Key", INTEGER,
+					"Metric", STRING,
+					{
+						{ 1, "Net Sales" },
+						{ 2, "Transactions" },
+						{ 3, "Avg Ticket" },
+						{ 4, "Avg Daily Sales" },
+						{ 5, "Labor %" },
+						{ 6, "Food Cost %" },
+						{ 7, "Prime Cost %" },
+						{ 8, "Guest Satisfaction" }
+					}
+				)

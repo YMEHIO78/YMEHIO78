@@ -1,0 +1,73 @@
+/// Date table, 1 Jan of the first trading year to the last trading day.
+table Calendar
+	lineageTag: aff3d359-d1c7-5bbf-9fc6-751a9c5869ae
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		isKey
+		lineageTag: 17df4f3f-cde8-5152-9467-427e3890cb57
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 20dd40e2-6a8b-5835-8bb3-1ce1a0d4502e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 0c429e88-99fc-5eac-89bf-7d2e2853ae72
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year Month Key'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 38e86ed8-7536-5526-bb69-00caf048eb11
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year Month Key]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year Month'
+		dataType: string
+		sortByColumn: 'Year Month Key'
+		lineageTag: 0b4aeeaf-4486-53c4-a7fa-2fe7c6e9b22b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				VAR FirstDay = DATE ( YEAR ( MIN ( Sales[Date] ) ), 1, 1 )
+				VAR LastDay = MAX ( Sales[Date] )
+				RETURN
+					ADDCOLUMNS (
+						CALENDAR ( FirstDay, LastDay ),
+						"Year", YEAR ( [Date] ),
+						"Month Number", MONTH ( [Date] ),
+						"Year Month Key", YEAR ( [Date] ) * 100 + MONTH ( [Date] ),
+						"Year Month", FORMAT ( [Date], "mmm yyyy" )
+					)
