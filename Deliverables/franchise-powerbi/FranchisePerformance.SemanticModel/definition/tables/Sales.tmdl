@@ -185,10 +185,12 @@ table Sales
 	measure 'Viewing As' =
 			VAR owners = COUNTROWS ( VALUES ( Franchisees[Franchisee] ) )
 			RETURN
-				IF (
-					owners = 1,
-					VALUES ( Franchisees[Franchisee] ),
-					"All " & owners & " owners. Pick one to preview their view"
+				SWITCH (
+					TRUE (),
+					owners = 0, "No locations are linked to this sign-in. Contact head office for access.",
+					owners = 1, "Showing: " & VALUES ( Franchisees[Franchisee] ),
+					ISFILTERED ( Franchisees[Franchisee] ), "Showing: " & owners & " owners",
+					"Showing: all " & owners & " owners. Pick one in Franchisee to preview their view"
 				)
 		displayFolder: Titles
 		lineageTag: 100a839a-dfa2-5346-abca-8c28bca19c91

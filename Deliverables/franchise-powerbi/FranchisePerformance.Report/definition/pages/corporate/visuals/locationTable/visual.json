@@ -6,8 +6,8 @@
     "y": 452,
     "z": 0,
     "height": 252,
-    "width": 780,
-    "tabOrder": 15000
+    "width": 700,
+    "tabOrder": 14000
   },
   "visual": {
     "visualType": "tableEx",
@@ -43,20 +43,6 @@
               "queryRef": "Franchisees.Franchisee",
               "nativeQueryRef": "Franchisee",
               "displayName": "Owner"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Locations"
-                    }
-                  },
-                  "Property": "Region"
-                }
-              },
-              "queryRef": "Locations.Region",
-              "nativeQueryRef": "Region"
             },
             {
               "field": {
@@ -100,7 +86,8 @@
                 }
               },
               "queryRef": "Sales.Avg Daily Sales",
-              "nativeQueryRef": "Avg Daily Sales"
+              "nativeQueryRef": "Avg Daily Sales",
+              "displayName": "Daily sales"
             },
             {
               "field": {
@@ -114,7 +101,8 @@
                 }
               },
               "queryRef": "Sales.Prime Cost %",
-              "nativeQueryRef": "Prime Cost %"
+              "nativeQueryRef": "Prime Cost %",
+              "displayName": "Prime cost"
             },
             {
               "field": {
@@ -152,21 +140,6 @@
         ],
         "isDefaultSort": false
       }
-    },
-    "objects": {
-      "columnHeaders": [
-        {
-          "properties": {
-            "wordWrap": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        }
-      ]
     },
     "visualContainerObjects": {
       "title": [
